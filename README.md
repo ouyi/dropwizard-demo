@@ -11,3 +11,5 @@
 # End-to-end tests
 
     curl -X PUT --data-binary @test.txt localhost:8080/upload/test.txt
+
+# TODOs

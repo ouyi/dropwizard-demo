@@ -12,6 +12,7 @@ import javax.ws.rs.core.Response;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
@@ -42,7 +43,9 @@ public class UploadResource {
 
     protected void streamToFile(InputStream inputStream, java.nio.file.Path targetPath) throws IOException {
         try (InputStream bufferedInputStream = new BufferedInputStream(inputStream)) {
-            copy(bufferedInputStream, targetPath, StandardCopyOption.REPLACE_EXISTING);
+            java.nio.file.Path temp = Files.createTempFile(null, null);
+            copy(bufferedInputStream, temp, StandardCopyOption.REPLACE_EXISTING);
+            Files.move(temp, targetPath, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
         }
     }
 }
