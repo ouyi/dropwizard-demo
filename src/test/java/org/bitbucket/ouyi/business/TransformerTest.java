@@ -18,6 +18,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.bitbucket.ouyi.business.Transformer.DATE_TIME_PATTERN;
 import static org.junit.Assert.*;
 
+import static org.mockito.Mockito.mock;
+
 /**
  * Created by worker on 12/22/16.
  */
@@ -30,6 +32,14 @@ public class TransformerTest {
     @After
     public void tearDown() throws Exception {
 
+    }
+
+    @Test
+    public void parseLine() {
+        PersonDAO personDAO = mock(PersonDAO.class);
+        Transformer transformer = new Transformer(personDAO);
+        String[] parsed = transformer.parseLine.apply("a,b,c");
+        assertThat(parsed).containsOnly("a", "b", "c").hasSize(3);
     }
 
     @Test
