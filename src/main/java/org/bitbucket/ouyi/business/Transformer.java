@@ -5,8 +5,6 @@ import org.bitbucket.ouyi.db.PersonDAO;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -14,6 +12,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.TimeZone;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  * Created by worker on 12/21/16.
@@ -29,8 +28,6 @@ public class Transformer {
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN).withZone(TimeZone.getDefault().toZoneId());
 
     private final CSVParser parser = new CSVParser();
-
-    private String uploadRootDir;
 
     private PersonDAO personDAO;
 
@@ -61,17 +58,15 @@ public class Transformer {
         return new Person(Integer.parseInt(s[ID_INDEX]), s[NAME_INDEX], utc);
     };
 
-    public Transformer(String uploadRootDir, PersonDAO personDAO) {
-        this.uploadRootDir = uploadRootDir;
+    public Transformer(PersonDAO personDAO) {
         this.personDAO = personDAO;
     }
 
-    public void transform(String filename) throws Exception {
-        Iterator<Person> iterator =
-                Files.lines(Paths.get(uploadRootDir, filename))
-                        .map(parseLine.andThen(removeObs.andThen(nameToLowercase.andThen(timeToUTC.andThen(toPerson)))))
-                        .distinct()
-                        .iterator();
+    public void transform(Stream<String> lines) throws Exception {
+        Iterator<Person> iterator = lines
+                .map(parseLine.andThen(removeObs.andThen(nameToLowercase.andThen(timeToUTC.andThen(toPerson)))))
+                .distinct()
+                .iterator();
         personDAO.insertAll(iterator);
     }
 

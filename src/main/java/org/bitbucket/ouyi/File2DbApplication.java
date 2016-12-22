@@ -30,8 +30,8 @@ public class File2DbApplication extends Application<File2DbConfiguration>{
         final DBIFactory factory = new DBIFactory();
         final DBI dbi = factory.build(environment, configuration.getDataSourceFactory(), "h2");
         final PersonDAO personDAO = new PersonDAO(dbi);
-        final Transformer transformer = new Transformer(uploadRootDir, personDAO);
-        final TransformResource transformResource = new TransformResource(transformer);
+        final Transformer transformer = new Transformer(personDAO);
+        final TransformResource transformResource = new TransformResource(uploadRootDir, transformer);
 
         environment.jersey().register(uploadResource);
         environment.jersey().register(transformResource);

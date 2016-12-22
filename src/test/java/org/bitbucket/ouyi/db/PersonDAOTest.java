@@ -12,13 +12,15 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * Created by worker on 12/22/16.
  */
 public class PersonDAOTest {
 
     @Test
-    public void testInsertAll() {
+    public void insertAll() {
         DBI dbi = new DBI("jdbc:h2:mem:test;IGNORECASE=TRUE;MODE=PostgreSQL");
         try (Handle handle = dbi.open()) {
             handle.createStatement("migrations/1-create-table-person.sql").execute();
@@ -28,11 +30,11 @@ public class PersonDAOTest {
 
             ZonedDateTime timeOfStart = ZonedDateTime.now();
             list.add(new Person(1, "john", timeOfStart));
-            list.add(new Person(2, "john", timeOfStart));
+            list.add(new Person(2, "mary", timeOfStart));
 
             personDAO.insertAll(list.iterator());
 
-            System.out.println(handle.createQuery("select * from person").list());
+            assertThat(handle.createQuery("select * from person").list().size()).isEqualTo(2);
         }
     }
 }
