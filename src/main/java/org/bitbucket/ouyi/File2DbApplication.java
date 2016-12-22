@@ -3,6 +3,8 @@ package org.bitbucket.ouyi;
 import io.dropwizard.Application;
 import io.dropwizard.jdbi.DBIFactory;
 import io.dropwizard.setup.Environment;
+import org.bitbucket.ouyi.api.TransformResource;
+import org.bitbucket.ouyi.api.UploadResource;
 import org.bitbucket.ouyi.business.Transformer;
 import org.bitbucket.ouyi.db.PersonDAO;
 import org.skife.jdbi.v2.DBI;

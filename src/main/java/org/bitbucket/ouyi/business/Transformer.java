@@ -67,11 +67,11 @@ public class Transformer {
     }
 
     public void transform(String filename) throws Exception {
-        Iterator<Person> iterator = Files.lines(Paths.get(uploadRootDir, filename))
-                .map(parseLine
-                        .andThen(removeObs
-                                .andThen(nameToLowercase
-                                        .andThen(timeToUTC.andThen(toPerson))))).distinct().iterator();
+        Iterator<Person> iterator =
+                Files.lines(Paths.get(uploadRootDir, filename))
+                        .map(parseLine.andThen(removeObs.andThen(nameToLowercase.andThen(timeToUTC.andThen(toPerson)))))
+                        .distinct()
+                        .iterator();
         personDAO.insertAll(iterator);
     }
 

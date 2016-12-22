@@ -1,5 +1,6 @@
-package org.bitbucket.ouyi;
+package org.bitbucket.ouyi.api;
 
+import org.bitbucket.ouyi.api.UploadResource;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
