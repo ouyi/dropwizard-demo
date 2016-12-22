@@ -5,6 +5,7 @@ import org.bitbucket.ouyi.db.PersonDAO;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -25,7 +26,7 @@ public class Transformer {
     public static final int TIME_INDEX = 2;
 
     // Assumption: time_of_start in default timezone
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN).withZone(TimeZone.getDefault().toZoneId());
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN).withZone(ZoneId.systemDefault());
 
     private final CSVParser parser = new CSVParser();
 
@@ -47,13 +48,7 @@ public class Transformer {
         return s;
     };
 
-    protected Function<String[], String[]> timeToUTC = s -> {
-        ZonedDateTime utc = ZonedDateTime.parse(s[TIME_INDEX], formatter).withZoneSameInstant(ZoneOffset.UTC);
-        s[TIME_INDEX] = utc.format(formatter);
-        return s;
-    };
-
-    protected Function<String[], Person> toPerson = s -> {
+    protected Function<String[], Person> toPersonUTC = s -> {
         ZonedDateTime utc = ZonedDateTime.parse(s[TIME_INDEX], formatter).withZoneSameInstant(ZoneOffset.UTC);
         return new Person(Integer.parseInt(s[ID_INDEX]), s[NAME_INDEX], utc);
     };
@@ -64,7 +59,7 @@ public class Transformer {
 
     public void transform(Stream<String> lines) throws Exception {
         Iterator<Person> iterator = lines
-                .map(parseLine.andThen(removeObs.andThen(nameToLowercase.andThen(timeToUTC.andThen(toPerson)))))
+                .map(parseLine.andThen(removeObs.andThen(nameToLowercase.andThen(toPersonUTC))))
                 .distinct()
                 .iterator();
         personDAO.insertAll(iterator);

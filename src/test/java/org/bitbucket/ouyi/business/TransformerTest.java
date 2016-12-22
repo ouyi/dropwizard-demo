@@ -7,11 +7,15 @@ import org.junit.Test;
 import org.skife.jdbi.v2.DBI;
 import org.skife.jdbi.v2.Handle;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.bitbucket.ouyi.business.Transformer.DATE_TIME_PATTERN;
 import static org.junit.Assert.*;
 
 /**
@@ -44,8 +48,14 @@ public class TransformerTest {
             );
 
             transformer.transform(lines);
-            List<Map<String, Object>> records = handle.createQuery("select * from person").list();
+            List<Person> records = handle.createQuery("select id, name, time_of_start from person").map(new PersonDAO.PersonMapper()).list();
             assertThat(records.size()).isEqualTo(2);
+
+            Person john = handle.createQuery("select id, name, time_of_start from person where id = :id").bind("id", 1).map(new PersonDAO.PersonMapper()).first();
+            assertThat(john).isNotNull();
+            assertThat(john.getName()).isEqualTo("john");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN).withZone(ZoneId.systemDefault());
+            assertThat(john.getTimeOfStart().format(formatter)).isEqualTo("12-06-1980 12:00:12");
         }
 
     }
