@@ -1,0 +1,5 @@
+database:
+  driverClass: org.h2.Driver
+  user: dba
+  password: dba
+  url: jdbc:h2:./build/file2db.h2;IGNORECASE=TRUE;MODE=PostgreSQL

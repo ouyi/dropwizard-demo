@@ -25,7 +25,7 @@ import static java.nio.file.Files.copy;
 public class UploadResource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UploadResource.class);
-    private String uploadRootDir;
+    private final String uploadRootDir;
 
     public UploadResource(String uploadRootDir) {
         this.uploadRootDir = uploadRootDir;
@@ -43,7 +43,7 @@ public class UploadResource {
 
     protected void streamToFile(InputStream inputStream, java.nio.file.Path targetPath) throws IOException {
         try (InputStream bufferedInputStream = new BufferedInputStream(inputStream)) {
-            java.nio.file.Path temp = Files.createTempFile(null, null);
+            java.nio.file.Path temp = Files.createTempFile("upload", null);
             copy(bufferedInputStream, temp, StandardCopyOption.REPLACE_EXISTING);
             Files.move(temp, targetPath, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
         }
