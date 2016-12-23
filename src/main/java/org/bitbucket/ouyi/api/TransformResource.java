@@ -1,6 +1,8 @@
 package org.bitbucket.ouyi.api;
 
 import org.bitbucket.ouyi.business.Transformer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -15,6 +17,7 @@ import java.nio.file.Paths;
 @Path("/transform")
 public class TransformResource {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(TransformResource.class);
     private final String uploadRootDir;
     private final Transformer transformer;
 
@@ -25,7 +28,9 @@ public class TransformResource {
 
     @POST
     public Response transform(@QueryParam("filename") String filename) throws Exception {
+        LOGGER.debug("Transforming file: " + filename);
         this.transformer.transform(Files.lines(Paths.get(uploadRootDir, filename)));
+        LOGGER.info("Transformed file: " + filename);
         return Response.ok().build();
     }
 }

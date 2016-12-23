@@ -34,10 +34,9 @@ public class UploadResource {
     @PUT
     @Path("{target}")
     public Response upload(@Context HttpServletRequest request, @PathParam("target") String target) throws IOException {
-        LOGGER.debug("Processing request: " + request.toString());
         LOGGER.debug("Uploading to target: " + target);
-
         streamToFile(request.getInputStream(), Paths.get(uploadRootDir, target));
+        LOGGER.info("Uploaded to target: " + target);
         return Response.ok().build();
     }
 
