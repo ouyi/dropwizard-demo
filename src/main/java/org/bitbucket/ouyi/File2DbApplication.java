@@ -3,6 +3,7 @@ package org.bitbucket.ouyi;
 import io.dropwizard.Application;
 import io.dropwizard.jdbi.DBIFactory;
 import io.dropwizard.setup.Environment;
+import liquibase.util.csv.opencsv.CSVParser;
 import org.bitbucket.ouyi.api.TransformResource;
 import org.bitbucket.ouyi.api.UploadResource;
 import org.bitbucket.ouyi.business.Transformer;
@@ -35,7 +36,7 @@ public class File2DbApplication extends Application<File2DbConfiguration>{
 
         final ZoneId zoneId = ZoneId.of(configuration.getTimezone());
         final DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern(configuration.getDateTimePattern()).withZone(zoneId);
-        final Transformer transformer = new Transformer(dateTimeFormat, personDAO);
+        final Transformer transformer = new Transformer(new CSVParser(), dateTimeFormat, personDAO);
         final TransformResource transformResource = new TransformResource(uploadRootDir, transformer);
 
         environment.jersey().register(uploadResource);

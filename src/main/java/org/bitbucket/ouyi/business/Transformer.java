@@ -22,7 +22,7 @@ public class Transformer {
     public static final int NAME_INDEX = 1;
     public static final int TIME_INDEX = 2;
 
-    private final CSVParser parser = new CSVParser();
+    private CSVParser parser;
     private DateTimeFormatter dateTimeFormat;
     private PersonDAO personDAO;
 
@@ -47,7 +47,8 @@ public class Transformer {
         return new Person(Integer.parseInt(s[ID_INDEX]), s[NAME_INDEX], dateTime.withZoneSameInstant(ZoneOffset.UTC));
     };
 
-    public Transformer(DateTimeFormatter dateTimeFormat, PersonDAO personDAO) {
+    public Transformer(CSVParser parser, DateTimeFormatter dateTimeFormat, PersonDAO personDAO) {
+        this.parser = parser;
         this.dateTimeFormat = dateTimeFormat;
         this.personDAO = personDAO;
     }

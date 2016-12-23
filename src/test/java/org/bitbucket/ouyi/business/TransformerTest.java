@@ -1,5 +1,6 @@
 package org.bitbucket.ouyi.business;
 
+import liquibase.util.csv.opencsv.CSVParser;
 import org.bitbucket.ouyi.db.PersonDAO;
 import org.junit.After;
 import org.junit.Before;
@@ -35,7 +36,7 @@ public class TransformerTest {
     @Test
     public void parseLine() {
         PersonDAO personDAO = mock(PersonDAO.class);
-        Transformer transformer = new Transformer(formatter, personDAO);
+        Transformer transformer = new Transformer(new CSVParser(), formatter, personDAO);
         String[] parsed = transformer.parseLine.apply("a,b,c");
         assertThat(parsed).containsOnly("a", "b", "c").hasSize(3);
     }
@@ -49,7 +50,7 @@ public class TransformerTest {
 
             PersonDAO personDAO = new PersonDAO(dbi);
 
-            Transformer transformer = new Transformer(formatter, personDAO);
+            Transformer transformer = new Transformer(new CSVParser(), formatter, personDAO);
             Stream<String> lines = Stream.of(
                     "1,John,12-06-1980 12:00:12,Some observations",
                     "1,John,12-06-1980 12:00:12,Some observation",
