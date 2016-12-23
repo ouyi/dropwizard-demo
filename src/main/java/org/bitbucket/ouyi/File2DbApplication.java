@@ -34,8 +34,8 @@ public class File2DbApplication extends Application<File2DbConfiguration>{
         final PersonDAO personDAO = new PersonDAO(dbi);
 
         final ZoneId zoneId = ZoneId.of(configuration.getTimezone());
-        final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(configuration.getDateTimePattern()).withZone(zoneId);
-        final Transformer transformer = new Transformer(formatter, personDAO);
+        final DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern(configuration.getDateTimePattern()).withZone(zoneId);
+        final Transformer transformer = new Transformer(dateTimeFormat, personDAO);
         final TransformResource transformResource = new TransformResource(uploadRootDir, transformer);
 
         environment.jersey().register(uploadResource);

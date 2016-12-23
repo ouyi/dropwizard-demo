@@ -23,7 +23,7 @@ public class Transformer {
     public static final int TIME_INDEX = 2;
 
     private final CSVParser parser = new CSVParser();
-    private DateTimeFormatter formatter;
+    private DateTimeFormatter dateTimeFormat;
     private PersonDAO personDAO;
 
     protected Function<String, String[]> parseLine = l -> {
@@ -43,12 +43,12 @@ public class Transformer {
     };
 
     protected Function<String[], Person> toPersonUTC = s -> {
-        ZonedDateTime dateTime = ZonedDateTime.parse(s[TIME_INDEX], formatter);
+        ZonedDateTime dateTime = ZonedDateTime.parse(s[TIME_INDEX], dateTimeFormat);
         return new Person(Integer.parseInt(s[ID_INDEX]), s[NAME_INDEX], dateTime.withZoneSameInstant(ZoneOffset.UTC));
     };
 
-    public Transformer(DateTimeFormatter formatter, PersonDAO personDAO) {
-        this.formatter = formatter;
+    public Transformer(DateTimeFormatter dateTimeFormat, PersonDAO personDAO) {
+        this.dateTimeFormat = dateTimeFormat;
         this.personDAO = personDAO;
     }
 
