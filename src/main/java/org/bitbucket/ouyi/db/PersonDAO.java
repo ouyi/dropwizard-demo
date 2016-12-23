@@ -55,7 +55,7 @@ public class PersonDAO {
             return new Person(
                     r.getInt("id"),
                     r.getString("name"),
-                    ZonedDateTime.ofInstant(r.getTimestamp("time_of_start").toInstant(), ZoneId.systemDefault()));
+                    ZonedDateTime.ofInstant(r.getTimestamp("time_of_start").toInstant(), ZoneId.of("UTC")));
         }
     }
 

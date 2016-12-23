@@ -13,7 +13,8 @@ import javax.validation.constraints.NotNull;
 public class File2DbConfiguration extends Configuration {
 
     private String uploadRootDir = "/tmp/file2db/upload";
-    private String transformRootDir = "/tmp/file2db/transform";
+    private String dateTimePattern = "MM-dd-yyyy HH:mm:ss";
+    private String timezone = "Europe/Berlin";
 
     @Valid
     @NotNull
@@ -25,8 +26,13 @@ public class File2DbConfiguration extends Configuration {
     }
 
     @JsonProperty
-    public String getTransformRootDir() {
-        return transformRootDir;
+    public String getDateTimePattern() {
+        return dateTimePattern;
+    }
+
+    @JsonProperty
+    public String getTimezone() {
+        return timezone;
     }
 
     @JsonProperty("database")

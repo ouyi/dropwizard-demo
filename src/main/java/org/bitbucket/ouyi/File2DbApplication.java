@@ -11,6 +11,8 @@ import org.skife.jdbi.v2.DBI;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Created by worker on 12/18/16.
@@ -30,7 +32,10 @@ public class File2DbApplication extends Application<File2DbConfiguration>{
         final DBIFactory factory = new DBIFactory();
         final DBI dbi = factory.build(environment, configuration.getDataSourceFactory(), "h2");
         final PersonDAO personDAO = new PersonDAO(dbi);
-        final Transformer transformer = new Transformer(personDAO);
+
+        final ZoneId zoneId = ZoneId.of(configuration.getTimezone());
+        final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(configuration.getDateTimePattern()).withZone(zoneId);
+        final Transformer transformer = new Transformer(formatter, personDAO);
         final TransformResource transformResource = new TransformResource(uploadRootDir, transformer);
 
         environment.jersey().register(uploadResource);

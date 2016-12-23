@@ -8,7 +8,6 @@
 - Re-uploading a file will overwrite the previously uploaded version
 - On DB primary key conflict, the conflicting entries in the DB will be deleted (and overwritten) 
 - "MM-dd-yyyy HH:mm:ss" date time format pattern
-- Date time in system timezone
 - No other data cleansing required (e.g., id is valid int)
 
 # Features

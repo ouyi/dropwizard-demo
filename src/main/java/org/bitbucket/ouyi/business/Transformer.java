@@ -5,7 +5,6 @@ import org.bitbucket.ouyi.db.PersonDAO;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -19,16 +18,12 @@ import java.util.stream.Stream;
  */
 public class Transformer {
 
-    public static final String DATE_TIME_PATTERN = "MM-dd-yyyy HH:mm:ss";
     public static final int ID_INDEX = 0;
     public static final int NAME_INDEX = 1;
     public static final int TIME_INDEX = 2;
 
-    // Assumption: time_of_start in default timezone
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN).withZone(ZoneId.systemDefault());
-
     private final CSVParser parser = new CSVParser();
-
+    private DateTimeFormatter formatter;
     private PersonDAO personDAO;
 
     protected Function<String, String[]> parseLine = l -> {
@@ -48,11 +43,12 @@ public class Transformer {
     };
 
     protected Function<String[], Person> toPersonUTC = s -> {
-        ZonedDateTime utc = ZonedDateTime.parse(s[TIME_INDEX], formatter).withZoneSameInstant(ZoneOffset.UTC);
-        return new Person(Integer.parseInt(s[ID_INDEX]), s[NAME_INDEX], utc);
+        ZonedDateTime dateTime = ZonedDateTime.parse(s[TIME_INDEX], formatter);
+        return new Person(Integer.parseInt(s[ID_INDEX]), s[NAME_INDEX], dateTime.withZoneSameInstant(ZoneOffset.UTC));
     };
 
-    public Transformer(PersonDAO personDAO) {
+    public Transformer(DateTimeFormatter formatter, PersonDAO personDAO) {
+        this.formatter = formatter;
         this.personDAO = personDAO;
     }
 

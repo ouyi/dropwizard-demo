@@ -8,22 +8,20 @@ import org.skife.jdbi.v2.DBI;
 import org.skife.jdbi.v2.Handle;
 
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.bitbucket.ouyi.business.Transformer.DATE_TIME_PATTERN;
-import static org.junit.Assert.*;
-
 import static org.mockito.Mockito.mock;
 
 /**
  * Created by worker on 12/22/16.
  */
 public class TransformerTest {
+
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss").withZone(ZoneId.of("Europe/Berlin"));
+
     @Before
     public void setUp() throws Exception {
 
@@ -37,7 +35,7 @@ public class TransformerTest {
     @Test
     public void parseLine() {
         PersonDAO personDAO = mock(PersonDAO.class);
-        Transformer transformer = new Transformer(personDAO);
+        Transformer transformer = new Transformer(formatter, personDAO);
         String[] parsed = transformer.parseLine.apply("a,b,c");
         assertThat(parsed).containsOnly("a", "b", "c").hasSize(3);
     }
@@ -50,7 +48,8 @@ public class TransformerTest {
             handle.createStatement("migrations/1-create-table-person.sql").execute();
 
             PersonDAO personDAO = new PersonDAO(dbi);
-            Transformer transformer = new Transformer(personDAO);
+
+            Transformer transformer = new Transformer(formatter, personDAO);
             Stream<String> lines = Stream.of(
                     "1,John,12-06-1980 12:00:12,Some observations",
                     "1,John,12-06-1980 12:00:12,Some observation",
@@ -64,7 +63,6 @@ public class TransformerTest {
             Person john = handle.createQuery("select id, name, time_of_start from person where id = :id").bind("id", 1).map(new PersonDAO.PersonMapper()).first();
             assertThat(john).isNotNull();
             assertThat(john.getName()).isEqualTo("john");
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN).withZone(ZoneId.systemDefault());
             assertThat(john.getTimeOfStart().format(formatter)).isEqualTo("12-06-1980 12:00:12");
         }
 
