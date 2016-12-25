@@ -30,6 +30,10 @@
 # TODOs
 
 - Add mq stuff
-- Extract FileWriter
+- Add configuration tests
+- Add integration tests (skipping mq stuff)
 - CI/CD
 - Delete conflicting entries before inserting (no need if not h2)
+- Add Java doc
+- Clean up PersonDAO
+- Add error handling (retries) to the resources
