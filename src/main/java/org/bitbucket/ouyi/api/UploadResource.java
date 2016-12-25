@@ -1,6 +1,7 @@
 package org.bitbucket.ouyi.api;
 
 import org.bitbucket.ouyi.io.FileStorage;
+import org.bitbucket.ouyi.mq.MessageQueueClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,9 +23,11 @@ public class UploadResource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UploadResource.class);
     private FileStorage fileStorage;
+    private MessageQueueClient messageQueueClient;
 
-    public UploadResource(FileStorage fileStorage) {
+    public UploadResource(FileStorage fileStorage, MessageQueueClient messageQueueClient) {
         this.fileStorage = fileStorage;
+        this.messageQueueClient = messageQueueClient;
     }
 
     @PUT
@@ -33,6 +36,7 @@ public class UploadResource {
         LOGGER.debug("Uploading to target: " + target);
         fileStorage.writeTo(request.getInputStream(), target);
         LOGGER.info("Uploaded to target: " + target);
+        messageQueueClient.publish(target);
         return Response.ok().build();
     }
 

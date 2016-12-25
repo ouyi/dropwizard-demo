@@ -29,6 +29,7 @@ dependencies {
     compile group: 'io.dropwizard', name: 'dropwizard-jdbi', version: dropwizardVersion
     compile group: 'io.dropwizard', name: 'dropwizard-migrations', version: dropwizardVersion
 
+    compile 'com.rabbitmq:amqp-client:3.6.6'
     compile 'com.h2database:h2:1.4.193'
     // The production code uses the SLF4J logging API at compile time
     compile 'org.slf4j:slf4j-api:1.7.21'

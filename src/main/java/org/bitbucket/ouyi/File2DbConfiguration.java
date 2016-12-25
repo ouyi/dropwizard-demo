@@ -3,6 +3,7 @@ package org.bitbucket.ouyi;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.Configuration;
 import io.dropwizard.db.DataSourceFactory;
+import org.bitbucket.ouyi.mq.MessageQueueFactory;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -19,6 +20,10 @@ public class File2DbConfiguration extends Configuration {
     @Valid
     @NotNull
     private DataSourceFactory database = new DataSourceFactory();
+
+    @Valid
+    @NotNull
+    private MessageQueueFactory messageQueue = new MessageQueueFactory();
 
     @JsonProperty
     public String getUploadRootDir() {
@@ -38,5 +43,15 @@ public class File2DbConfiguration extends Configuration {
     @JsonProperty("database")
     public DataSourceFactory getDataSourceFactory() {
         return database;
+    }
+
+    @JsonProperty("messageQueue")
+    public MessageQueueFactory getMessageQueueFactory() {
+        return messageQueue;
+    }
+
+    @JsonProperty("messageQueue")
+    public void setMessageQueueFactory(MessageQueueFactory factory) {
+        this.messageQueue = factory;
     }
 }
