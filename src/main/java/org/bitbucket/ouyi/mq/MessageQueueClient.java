@@ -17,7 +17,7 @@ public class MessageQueueClient {
         this.queueName = queueName;
     }
 
-    public void publish(String message) throws IOException {
+    public synchronized void publish(String message) throws IOException {
         channel.basicPublish("", queueName, null, message.getBytes("UTF-8"));
     }
 }
