@@ -1,6 +1,7 @@
 package org.bitbucket.ouyi.mq;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.rabbitmq.client.BuiltinExchangeType;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
@@ -29,7 +30,21 @@ public class MessageQueueFactory {
     @Max(65535)
     private int port = 5672;
 
-    private String queueName = "filename_queue";
+    @NotEmpty
+    private String exchangeName = "filename_exchange";
+
+    private String exchangeType = BuiltinExchangeType.DIRECT.toString();
+
+    private boolean exchangeDurable = true;
+
+    @NotEmpty
+    private String routingKey = "filename_key";
+
+    private boolean queueDurable = true;
+
+    private boolean isQueueExclusive = false;
+
+    private boolean isQueueAutoDelete = false;
 
     @JsonProperty
     public String getHost() {
@@ -52,8 +67,13 @@ public class MessageQueueFactory {
     }
 
     @JsonProperty
-    public String getQueueName() {
-        return queueName;
+    public String getExchangeName() {
+        return exchangeName;
+    }
+
+    @JsonProperty
+    public String getRoutingKey() {
+        return routingKey;
     }
 
     /**
@@ -67,8 +87,12 @@ public class MessageQueueFactory {
         Connection connection = factory.newConnection();
         Channel channel = connection.createChannel();
 
-        channel.queueDeclare(getQueueName(), true, false, false, null);
-        MessageQueueClient client = new MessageQueueClient(channel, getQueueName());
+        channel.exchangeDeclare(getExchangeName(), exchangeType, exchangeDurable);
+        String queueName = channel.queueDeclare("", queueDurable, isQueueExclusive, isQueueAutoDelete, null).getQueue();
+        System.out.println("queueName: " + queueName);
+        channel.queueBind(queueName, getExchangeName(), getRoutingKey());
+
+        MessageQueueClient client = new MessageQueueClient(channel, getExchangeName(), getRoutingKey());
 
         environment.lifecycle().manage(new Managed() {
             @Override
@@ -90,23 +114,6 @@ public class MessageQueueFactory {
                 }
             }
         });
-        return client;
-    }
-
-    /**
-     * Build for standalone application.
-     */
-    public MessageQueueClient build() throws IOException, TimeoutException {
-
-        ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost(getHost());
-        factory.setPort(getPort());
-        Connection connection = factory.newConnection();
-        Channel channel = connection.createChannel();
-
-        channel.queueDeclare(getQueueName(), true, false, false, null);
-        MessageQueueClient client = new MessageQueueClient(channel, getQueueName());
-
         return client;
     }
 

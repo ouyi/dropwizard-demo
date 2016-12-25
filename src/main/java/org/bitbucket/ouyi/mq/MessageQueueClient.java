@@ -10,14 +10,16 @@ import java.io.IOException;
 public class MessageQueueClient {
 
     private final Channel channel;
-    private final String queueName;
+    private final String routingKey;
+    private final String exchangeName;
 
-    public MessageQueueClient(Channel channel, String queueName) throws IOException {
+    public MessageQueueClient(Channel channel, String exchangeName, String routingKey) throws IOException {
         this.channel = channel;
-        this.queueName = queueName;
+        this.exchangeName = exchangeName;
+        this.routingKey = routingKey;
     }
 
     public synchronized void publish(String message) throws IOException {
-        channel.basicPublish("", queueName, null, message.getBytes("UTF-8"));
+        channel.basicPublish(exchangeName, routingKey, null, message.getBytes("UTF-8"));
     }
 }
