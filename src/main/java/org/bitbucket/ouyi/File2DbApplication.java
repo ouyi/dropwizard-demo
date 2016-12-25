@@ -27,11 +27,11 @@ public class File2DbApplication extends Application<File2DbConfiguration>{
     @Override
     public void run(File2DbConfiguration configuration, Environment environment) throws Exception {
 
-        final String storageRoot = configuration.getUploadRootDir();
+        final String storageRoot = configuration.getStorageRoot();
         Files.createDirectories(Paths.get(storageRoot));
 
         final FileStorage fileStorage = new FileStorage(storageRoot);
-        MessageQueueClient messageQueueClient = configuration.getMessageQueueFactory().build(environment);
+        final MessageQueueClient messageQueueClient = configuration.getMessageQueueFactory().build(environment);
         final UploadResource uploadResource = new UploadResource(fileStorage, messageQueueClient);
 
         final DBIFactory factory = new DBIFactory();
