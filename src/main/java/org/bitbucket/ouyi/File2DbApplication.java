@@ -6,6 +6,7 @@ import io.dropwizard.setup.Environment;
 import liquibase.util.csv.opencsv.CSVParser;
 import org.bitbucket.ouyi.api.TransformResource;
 import org.bitbucket.ouyi.api.UploadResource;
+import org.bitbucket.ouyi.business.FileStorage;
 import org.bitbucket.ouyi.business.Transformer;
 import org.bitbucket.ouyi.db.PersonDAO;
 import org.skife.jdbi.v2.DBI;
@@ -28,7 +29,8 @@ public class File2DbApplication extends Application<File2DbConfiguration>{
         final String uploadRootDir = configuration.getUploadRootDir();
         Files.createDirectories(Paths.get(uploadRootDir));
 
-        final UploadResource uploadResource = new UploadResource(uploadRootDir);
+        final FileStorage fileStorage = new FileStorage();
+        final UploadResource uploadResource = new UploadResource(uploadRootDir, fileStorage);
 
         final DBIFactory factory = new DBIFactory();
         final DBI dbi = factory.build(environment, configuration.getDataSourceFactory(), "h2");

@@ -1,5 +1,6 @@
 package org.bitbucket.ouyi.api;
 
+import org.bitbucket.ouyi.business.FileStorage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,25 +27,21 @@ public class UploadResource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UploadResource.class);
     private final String uploadRootDir;
+    private FileStorage fileStorage;
 
-    public UploadResource(String uploadRootDir) {
+    public UploadResource(String uploadRootDir, FileStorage fileStorage) {
         this.uploadRootDir = uploadRootDir;
+        this.fileStorage = fileStorage;
     }
 
     @PUT
     @Path("{target}")
     public Response upload(@Context HttpServletRequest request, @PathParam("target") String target) throws IOException {
         LOGGER.debug("Uploading to target: " + target);
-        streamToFile(request.getInputStream(), Paths.get(uploadRootDir, target));
+        fileStorage.streamToFile(request.getInputStream(), Paths.get(uploadRootDir, target));
         LOGGER.info("Uploaded to target: " + target);
         return Response.ok().build();
     }
 
-    protected void streamToFile(InputStream inputStream, java.nio.file.Path targetPath) throws IOException {
-        try (InputStream bufferedInputStream = new BufferedInputStream(inputStream)) {
-            java.nio.file.Path temp = Files.createTempFile("upload", null);
-            copy(bufferedInputStream, temp, StandardCopyOption.REPLACE_EXISTING);
-            Files.move(temp, targetPath, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
-        }
-    }
+
 }

@@ -1,6 +1,5 @@
-package org.bitbucket.ouyi.api;
+package org.bitbucket.ouyi.business;
 
-import org.bitbucket.ouyi.api.UploadResource;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -15,9 +14,9 @@ import java.nio.file.Paths;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Created by worker on 12/16/16.
+ * Created by worker on 12/25/16.
  */
-public class UploadResourceTest {
+public class FileStorageTest {
 
     @Rule
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
@@ -28,10 +27,10 @@ public class UploadResourceTest {
         String testFileContent = "test file";
         String testFileName = "test.dat";
         Path testFilePath = Paths.get(uploadRootDir, testFileName);
-        UploadResource uploadResource = new UploadResource(uploadRootDir);
 
         InputStream inputStream = new ByteArrayInputStream(testFileContent.getBytes(StandardCharsets.UTF_8));
-        uploadResource.streamToFile(inputStream, testFilePath);
+        FileStorage fileStorage = new FileStorage();
+        fileStorage.streamToFile(inputStream, testFilePath);
         assertThat(testFilePath.toFile().exists()).isTrue();
         assertThat(new String(Files.readAllBytes(testFilePath))).isEqualTo(testFileContent);
     }
