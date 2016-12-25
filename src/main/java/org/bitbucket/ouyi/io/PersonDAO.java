@@ -1,4 +1,4 @@
-package org.bitbucket.ouyi.db;
+package org.bitbucket.ouyi.io;
 
 import org.bitbucket.ouyi.business.Person;
 import org.skife.jdbi.v2.DBI;

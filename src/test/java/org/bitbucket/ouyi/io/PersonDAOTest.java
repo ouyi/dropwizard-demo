@@ -1,4 +1,4 @@
-package org.bitbucket.ouyi.db;
+package org.bitbucket.ouyi.io;
 
 import org.bitbucket.ouyi.business.Person;
 import org.junit.Test;
@@ -6,11 +6,8 @@ import org.skife.jdbi.v2.DBI;
 import org.skife.jdbi.v2.Handle;
 
 import java.time.ZonedDateTime;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

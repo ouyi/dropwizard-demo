@@ -1,6 +1,5 @@
-package org.bitbucket.ouyi.db;
+package org.bitbucket.ouyi.io;
 
-import org.bitbucket.ouyi.db.FileStorage;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;

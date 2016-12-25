@@ -1,7 +1,7 @@
 package org.bitbucket.ouyi.business;
 
 import liquibase.util.csv.opencsv.CSVParser;
-import org.bitbucket.ouyi.db.PersonDAO;
+import org.bitbucket.ouyi.io.PersonDAO;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

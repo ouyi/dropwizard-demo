@@ -6,9 +6,9 @@ import io.dropwizard.setup.Environment;
 import liquibase.util.csv.opencsv.CSVParser;
 import org.bitbucket.ouyi.api.TransformResource;
 import org.bitbucket.ouyi.api.UploadResource;
-import org.bitbucket.ouyi.db.FileStorage;
+import org.bitbucket.ouyi.io.FileStorage;
 import org.bitbucket.ouyi.business.Transformer;
-import org.bitbucket.ouyi.db.PersonDAO;
+import org.bitbucket.ouyi.io.PersonDAO;
 import org.skife.jdbi.v2.DBI;
 
 import java.nio.file.Files;
