@@ -30,7 +30,7 @@ public class FileStorageTest {
 
         InputStream inputStream = new ByteArrayInputStream(testFileContent.getBytes(StandardCharsets.UTF_8));
         FileStorage fileStorage = new FileStorage();
-        fileStorage.streamToFile(inputStream, testFilePath);
+        fileStorage.streamToPath(inputStream, testFilePath);
         assertThat(testFilePath.toFile().exists()).isTrue();
         assertThat(new String(Files.readAllBytes(testFilePath))).isEqualTo(testFileContent);
     }

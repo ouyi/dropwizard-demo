@@ -12,9 +12,9 @@ import static java.nio.file.Files.copy;
  * Created by worker on 12/25/16.
  */
 public class FileStorage {
-    public void streamToFile(InputStream inputStream, java.nio.file.Path targetPath) throws IOException {
+    public void streamToPath(InputStream inputStream, java.nio.file.Path targetPath) throws IOException {
         try (InputStream bufferedInputStream = new BufferedInputStream(inputStream)) {
-            java.nio.file.Path temp = Files.createTempFile("upload", null);
+            java.nio.file.Path temp = Files.createTempFile(FileStorage.class.getSimpleName(), ".tmp");
             copy(bufferedInputStream, temp, StandardCopyOption.REPLACE_EXISTING);
             Files.move(temp, targetPath, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
         }

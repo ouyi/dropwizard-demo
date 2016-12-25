@@ -10,12 +10,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 
 import static java.nio.file.Files.copy;
 
@@ -38,7 +34,7 @@ public class UploadResource {
     @Path("{target}")
     public Response upload(@Context HttpServletRequest request, @PathParam("target") String target) throws IOException {
         LOGGER.debug("Uploading to target: " + target);
-        fileStorage.streamToFile(request.getInputStream(), Paths.get(uploadRootDir, target));
+        fileStorage.streamToPath(request.getInputStream(), Paths.get(uploadRootDir, target));
         LOGGER.info("Uploaded to target: " + target);
         return Response.ok().build();
     }
