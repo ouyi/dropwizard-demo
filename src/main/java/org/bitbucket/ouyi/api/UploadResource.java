@@ -1,6 +1,6 @@
 package org.bitbucket.ouyi.api;
 
-import org.bitbucket.ouyi.business.FileStorage;
+import org.bitbucket.ouyi.db.FileStorage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

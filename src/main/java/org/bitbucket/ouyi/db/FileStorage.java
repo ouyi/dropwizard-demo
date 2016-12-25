@@ -1,4 +1,4 @@
-package org.bitbucket.ouyi.business;
+package org.bitbucket.ouyi.db;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
