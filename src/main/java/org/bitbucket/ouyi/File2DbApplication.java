@@ -26,11 +26,11 @@ public class File2DbApplication extends Application<File2DbConfiguration>{
     @Override
     public void run(File2DbConfiguration configuration, Environment environment) throws Exception {
 
-        final String uploadRootDir = configuration.getUploadRootDir();
-        Files.createDirectories(Paths.get(uploadRootDir));
+        final String storageRoot = configuration.getUploadRootDir();
+        Files.createDirectories(Paths.get(storageRoot));
 
-        final FileStorage fileStorage = new FileStorage();
-        final UploadResource uploadResource = new UploadResource(uploadRootDir, fileStorage);
+        final FileStorage fileStorage = new FileStorage(storageRoot);
+        final UploadResource uploadResource = new UploadResource(fileStorage);
 
         final DBIFactory factory = new DBIFactory();
         final DBI dbi = factory.build(environment, configuration.getDataSourceFactory(), "h2");
@@ -39,7 +39,7 @@ public class File2DbApplication extends Application<File2DbConfiguration>{
         final ZoneId zoneId = ZoneId.of(configuration.getTimezone());
         final DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern(configuration.getDateTimePattern()).withZone(zoneId);
         final Transformer transformer = new Transformer(new CSVParser(), dateTimeFormat, personDAO);
-        final TransformResource transformResource = new TransformResource(uploadRootDir, transformer);
+        final TransformResource transformResource = new TransformResource(fileStorage, transformer);
 
         environment.jersey().register(uploadResource);
         environment.jersey().register(transformResource);

@@ -26,6 +26,20 @@ public class Transformer {
     private DateTimeFormatter dateTimeFormat;
     private PersonDAO personDAO;
 
+    public Transformer(CSVParser parser, DateTimeFormatter dateTimeFormat, PersonDAO personDAO) {
+        this.parser = parser;
+        this.dateTimeFormat = dateTimeFormat;
+        this.personDAO = personDAO;
+    }
+
+    public void transform(Stream<String> lines) throws Exception {
+        Iterator<Person> iterator = lines
+                .map(parseLine.andThen(removeObs.andThen(nameToLowercase.andThen(toPersonUTC))))
+                .distinct()
+                .iterator();
+        personDAO.insertAll(iterator);
+    }
+
     protected Function<String, String[]> parseLine = l -> {
         try {
             return parser.parseLine(l);
@@ -46,19 +60,4 @@ public class Transformer {
         ZonedDateTime dateTime = ZonedDateTime.parse(s[TIME_INDEX], dateTimeFormat);
         return new Person(Integer.parseInt(s[ID_INDEX]), s[NAME_INDEX], dateTime.withZoneSameInstant(ZoneOffset.UTC));
     };
-
-    public Transformer(CSVParser parser, DateTimeFormatter dateTimeFormat, PersonDAO personDAO) {
-        this.parser = parser;
-        this.dateTimeFormat = dateTimeFormat;
-        this.personDAO = personDAO;
-    }
-
-    public void transform(Stream<String> lines) throws Exception {
-        Iterator<Person> iterator = lines
-                .map(parseLine.andThen(removeObs.andThen(nameToLowercase.andThen(toPersonUTC))))
-                .distinct()
-                .iterator();
-        personDAO.insertAll(iterator);
-    }
-
 }

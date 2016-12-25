@@ -22,15 +22,16 @@ public class FileStorageTest {
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
     @Test
-    public void streamToFile() throws Exception {
-        String uploadRootDir = temporaryFolder.newFolder().getAbsolutePath();
+    public void streamToTarget() throws Exception {
+        String storageRoot = temporaryFolder.newFolder().getAbsolutePath();
         String testFileContent = "test file";
         String testFileName = "test.dat";
-        Path testFilePath = Paths.get(uploadRootDir, testFileName);
-
         InputStream inputStream = new ByteArrayInputStream(testFileContent.getBytes(StandardCharsets.UTF_8));
-        FileStorage fileStorage = new FileStorage();
-        fileStorage.streamToPath(inputStream, testFilePath);
+        FileStorage fileStorage = new FileStorage(storageRoot);
+
+        fileStorage.writeTo(inputStream, testFileName);
+
+        Path testFilePath = Paths.get(storageRoot, testFileName);
         assertThat(testFilePath.toFile().exists()).isTrue();
         assertThat(new String(Files.readAllBytes(testFilePath))).isEqualTo(testFileContent);
     }

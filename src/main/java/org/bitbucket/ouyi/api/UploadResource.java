@@ -11,7 +11,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
-import java.nio.file.Paths;
 
 import static java.nio.file.Files.copy;
 
@@ -22,11 +21,9 @@ import static java.nio.file.Files.copy;
 public class UploadResource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UploadResource.class);
-    private final String uploadRootDir;
     private FileStorage fileStorage;
 
-    public UploadResource(String uploadRootDir, FileStorage fileStorage) {
-        this.uploadRootDir = uploadRootDir;
+    public UploadResource(FileStorage fileStorage) {
         this.fileStorage = fileStorage;
     }
 
@@ -34,7 +31,7 @@ public class UploadResource {
     @Path("{target}")
     public Response upload(@Context HttpServletRequest request, @PathParam("target") String target) throws IOException {
         LOGGER.debug("Uploading to target: " + target);
-        fileStorage.streamToPath(request.getInputStream(), Paths.get(uploadRootDir, target));
+        fileStorage.writeTo(request.getInputStream(), target);
         LOGGER.info("Uploaded to target: " + target);
         return Response.ok().build();
     }
