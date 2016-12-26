@@ -58,6 +58,12 @@ public class MessageQueueFactory {
     @JsonProperty
     private String queueName = "filename_queue";
 
+    @JsonProperty
+    private boolean isAutoAck = false;
+
+    @JsonProperty
+    private int prefetchCount = 1;
+
     public String getHost() {
         return host;
     }
@@ -75,10 +81,40 @@ public class MessageQueueFactory {
     }
 
     /**
-     * Build with lifecycle hooks set up.
+     * Build with lifecycle hooks set up, if the parameter environment is not null.
+     *
+     * @param environment optional
      */
-    public MessageQueueClient build(Environment environment) throws IOException, TimeoutException {
+    public WorkQueuePublisher createPublisher(Environment environment) throws IOException, TimeoutException {
+        WorkQueue workQueue = createWorkQueue();
+        environment.lifecycle().manage(new Managed() {
+            @Override
+            public void start() {
+            }
+            @Override
+            public void stop() {
+                try {
+                    workQueue.getChannel().close();
+                } catch (Exception e) {
+                    LOGGER.error(e.getMessage());
+                }
+                try {
+                    workQueue.getConnection().close();
+                } catch (Exception e) {
+                    LOGGER.error(e.getMessage());
+                }
+            }
+        });
+        return new WorkQueuePublisher(workQueue.getChannel(), workQueue.getExchangeName(), workQueue.getRoutingKey());
+    }
 
+    public WorkQueueSubscriber createSubscriber() throws IOException, TimeoutException {
+        WorkQueue workQueue = createWorkQueue();
+        workQueue.getChannel().basicQos(prefetchCount);
+        return new WorkQueueSubscriber(workQueue.getChannel(), workQueue.getQueueName(), workQueue.getRoutingKey(), isAutoAck);
+    }
+
+    public WorkQueue createWorkQueue() throws IOException, TimeoutException {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost(getHost());
         factory.setPort(getPort());
@@ -90,31 +126,7 @@ public class MessageQueueFactory {
         channel.queueBind(generatedQueueName, getExchangeName(), getRoutingKey());
         LOGGER.info("Queue {} bound to exchange {} with routing key {}", generatedQueueName, getExchangeName(), getRoutingKey());
 
-        MessageQueueClient client = new MessageQueueClient(channel, getExchangeName(), getRoutingKey());
-
-        if (environment != null) {
-            environment.lifecycle().manage(new Managed() {
-                @Override
-                public void start() {
-                }
-
-                @Override
-                public void stop() {
-                    try {
-                        channel.close();
-
-                    } catch (Exception e) {
-                        LOGGER.error(e.getMessage());
-                    }
-                    try {
-                        connection.close();
-                    } catch (Exception e) {
-                        LOGGER.error(e.getMessage());
-                    }
-                }
-            });
-        }
-        return client;
+        return new WorkQueue(connection, channel, getExchangeName(), generatedQueueName, getRoutingKey());
     }
 
 }

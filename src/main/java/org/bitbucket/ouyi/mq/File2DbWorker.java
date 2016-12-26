@@ -4,36 +4,33 @@ package org.bitbucket.ouyi.mq;
  * Created by worker on 12/26/16.
  */
 import com.rabbitmq.client.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 public class File2DbWorker {
-    private static final String EXCHANGE_NAME = "filename_exchange";
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MessageQueueFactory.class);
 
     public static void main(String[] argv) throws Exception {
-        ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("localhost");
-        Connection connection = factory.newConnection();
-        Channel channel = connection.createChannel();
 
-        boolean exchangeDurable = true;
-        channel.exchangeDeclare(EXCHANGE_NAME, "direct", exchangeDurable);
-        String queueName = "filename_queue";
-        boolean queueDurable = true;
-        boolean isQueueExclusive = false;
-        boolean isQueueAutoDelete = false;
-        String generatedQueueName = channel.queueDeclare(queueName, queueDurable, isQueueExclusive, isQueueAutoDelete, null).getQueue();
-        channel.queueBind(generatedQueueName, EXCHANGE_NAME, "filename_key");
-        System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
+        WorkQueueSubscriber subscriber = new MessageQueueFactory().createSubscriber();
+
+        LOGGER.info(" [*] Waiting for messages. To exit press CTRL+C");
+
+        Channel channel = subscriber.getChannel();
 
         Consumer consumer = new DefaultConsumer(channel) {
             @Override
             public void handleDelivery(String consumerTag, Envelope envelope,
                                        AMQP.BasicProperties properties, byte[] body) throws IOException {
                 String message = new String(body, "UTF-8");
-                System.out.println(" [x] Received '" + message + "'");
+                LOGGER.info(" [x] Received '" + message + "'");
+                channel.basicAck(envelope.getDeliveryTag(), false);
             }
         };
-        channel.basicConsume(queueName, true, consumer);
+
+        subscriber.subscribe(consumer);
     }
 }

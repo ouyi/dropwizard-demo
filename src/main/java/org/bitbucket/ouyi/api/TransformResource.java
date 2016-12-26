@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 
 /**
@@ -26,7 +26,8 @@ public class TransformResource {
     }
 
     @POST
-    public Response transform(@QueryParam("filename") String filename) throws Exception {
+    @Path("{filename}")
+    public Response transform(@PathParam("filename") String filename) throws Exception {
         LOGGER.debug("Transforming file: " + filename);
         this.transformer.transform(fileStorage.readLinesFrom(filename));
         LOGGER.info("Transformed file: " + filename);

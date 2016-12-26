@@ -12,14 +12,14 @@ import org.bitbucket.ouyi.api.UploadResource;
 import org.bitbucket.ouyi.business.Transformer;
 import org.bitbucket.ouyi.io.FileStorage;
 import org.bitbucket.ouyi.io.PersonDAO;
-import org.bitbucket.ouyi.mq.MessageQueueClient;
+import org.bitbucket.ouyi.mq.WorkQueue;
+import org.bitbucket.ouyi.mq.WorkQueuePublisher;
 import org.skife.jdbi.v2.DBI;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Map;
 
 /**
  * Created by worker on 12/18/16.
@@ -35,8 +35,8 @@ public class File2DbApplication extends Application<File2DbConfiguration>{
         Files.createDirectories(Paths.get(storageRoot));
 
         final FileStorage fileStorage = new FileStorage(storageRoot);
-        final MessageQueueClient messageQueueClient = configuration.getMessageQueueFactory().build(environment);
-        final UploadResource uploadResource = new UploadResource(fileStorage, messageQueueClient);
+        final WorkQueuePublisher publisher = configuration.getMessageQueueFactory().createPublisher(environment);
+        final UploadResource uploadResource = new UploadResource(fileStorage, publisher);
 
         final DBIFactory factory = new DBIFactory();
         final DBI dbi = factory.build(environment, configuration.getDataSourceFactory(), "h2");
