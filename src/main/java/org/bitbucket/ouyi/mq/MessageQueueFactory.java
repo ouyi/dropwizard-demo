@@ -92,26 +92,28 @@ public class MessageQueueFactory {
 
         MessageQueueClient client = new MessageQueueClient(channel, getExchangeName(), getRoutingKey());
 
-        environment.lifecycle().manage(new Managed() {
-            @Override
-            public void start() {
-            }
-
-            @Override
-            public void stop() {
-                try {
-                    channel.close();
-
-                } catch (Exception e) {
-                    LOGGER.error(e.getMessage());
+        if (environment != null) {
+            environment.lifecycle().manage(new Managed() {
+                @Override
+                public void start() {
                 }
-                try {
-                    connection.close();
-                } catch (Exception e) {
-                    LOGGER.error(e.getMessage());
+
+                @Override
+                public void stop() {
+                    try {
+                        channel.close();
+
+                    } catch (Exception e) {
+                        LOGGER.error(e.getMessage());
+                    }
+                    try {
+                        connection.close();
+                    } catch (Exception e) {
+                        LOGGER.error(e.getMessage());
+                    }
                 }
-            }
-        });
+            });
+        }
         return client;
     }
 

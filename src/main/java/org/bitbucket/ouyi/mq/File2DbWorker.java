@@ -7,7 +7,7 @@ import com.rabbitmq.client.*;
 
 import java.io.IOException;
 
-public class FilenameWorker {
+public class File2DbWorker {
     private static final String EXCHANGE_NAME = "filename_exchange";
 
     public static void main(String[] argv) throws Exception {

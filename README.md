@@ -29,7 +29,7 @@
 
 - Start worker
 
-    java -cp "file2db/lib/*" org.bitbucket.ouyi.mq.FilenameWorker
+    java -cp "file2db/lib/*" org.bitbucket.ouyi.mq.File2DbWorker
 
 - Connect to h2
 
