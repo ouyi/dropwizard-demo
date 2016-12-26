@@ -44,5 +44,5 @@ dependencies {
 
 mainClassName = 'org.bitbucket.ouyi.File2DbApplication'
 run {
-    args 'server'
+    args 'server', 'build/resources/main/file2db.yml'
 }
