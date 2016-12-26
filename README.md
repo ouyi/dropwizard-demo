@@ -23,9 +23,18 @@
 
     curl -X POST localhost:8080/transform/test.csv
 
-- Starting rabbitmq
+- Start rabbitmq
 
     docker run -p 15671:15671 -p 15672:15672 -p 25672:25672 -p 4369:4369 -p 5671:5671 -p 5672:5672 -d --hostname b50 --name rabbit0 -e RABBITMQ_DEFAULT_USER=guest -e RABBITMQ_DEFAULT_PASS=guest rabbitmq:3-management
+
+- Start worker
+
+    java -cp "file2db/lib/*" org.bitbucket.ouyi.mq.FilenameWorker
+
+- Connect to h2
+
+    java -cp ./build/distributions/file2db/lib/h2-1.4.193.jar org.h2.tools.Shell
+    Use connection data of build/resources/main/file2db.yml 
 
 # TODOs
 
@@ -36,4 +45,5 @@
 - Delete conflicting entries before inserting (no need if not h2)
 - Add Java doc
 - Clean up PersonDAO
-- Add error handling (retries) to the resources
+- Add error handling (retries) to the resources or to the worker
+

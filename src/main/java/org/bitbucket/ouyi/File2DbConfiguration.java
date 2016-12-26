@@ -47,5 +47,4 @@ public class File2DbConfiguration extends Configuration {
     public MessageQueueFactory getMessageQueueFactory() {
         return messageQueue;
     }
-
 }

@@ -1,7 +1,10 @@
 package org.bitbucket.ouyi;
 
 import io.dropwizard.Application;
+import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.jdbi.DBIFactory;
+import io.dropwizard.migrations.MigrationsBundle;
+import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import liquibase.util.csv.opencsv.CSVParser;
 import org.bitbucket.ouyi.api.TransformResource;
@@ -16,6 +19,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
 
 /**
  * Created by worker on 12/18/16.
@@ -47,4 +51,18 @@ public class File2DbApplication extends Application<File2DbConfiguration>{
         environment.jersey().register(transformResource);
     }
 
+    @Override
+    public String getName() {
+        return "file2db";
+    }
+
+    @Override
+    public void initialize(Bootstrap<File2DbConfiguration> bootstrap) {
+        bootstrap.addBundle(new MigrationsBundle<File2DbConfiguration>() {
+            @Override
+            public DataSourceFactory getDataSourceFactory(File2DbConfiguration configuration) {
+                return configuration.getDataSourceFactory();
+            }
+        });
+    }
 }
