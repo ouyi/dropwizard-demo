@@ -45,6 +45,8 @@
 # TODOs
 
 - Add mq stuff
+- File2DbWorker config yml
+- migrations yml
 - Add configuration tests
 - Add integration tests (skipping mq stuff)
 - CI/CD
