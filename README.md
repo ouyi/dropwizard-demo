@@ -44,7 +44,6 @@
 
 # TODOs
 
-- Add mq stuff
 - File2DbWorker config yml
 - migrations yml
 - Add configuration tests
@@ -54,4 +53,4 @@
 - Add Java doc
 - Clean up PersonDAO
 - Add error handling (retries) to the resources or to the worker
-
+- Add app version

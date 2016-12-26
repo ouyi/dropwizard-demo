@@ -1,0 +1,4 @@
+
+messageQueue:
+  host: localhost
+  port: 5672
