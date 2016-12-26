@@ -24,54 +24,52 @@ public class MessageQueueFactory {
     private static final Logger LOGGER = LoggerFactory.getLogger(MessageQueueFactory.class);
 
     @NotEmpty
+    @JsonProperty
     private String host = "localhost";
 
     @Min(1)
     @Max(65535)
+    @JsonProperty
     private int port = 5672;
 
     @NotEmpty
+    @JsonProperty
     private String exchangeName = "filename_exchange";
 
-    private String exchangeType = BuiltinExchangeType.DIRECT.toString();
+    @JsonProperty
+    private String exchangeType = BuiltinExchangeType.DIRECT.toString().toLowerCase();
 
+    @JsonProperty
     private boolean exchangeDurable = true;
 
     @NotEmpty
+    @JsonProperty
     private String routingKey = "filename_key";
 
+    @JsonProperty
     private boolean queueDurable = true;
 
+    @JsonProperty
     private boolean isQueueExclusive = false;
 
+    @JsonProperty
     private boolean isQueueAutoDelete = false;
 
     @JsonProperty
+    private String queueName = "filename_queue";
+
     public String getHost() {
         return host;
     }
 
-    @JsonProperty
-    public void setHost(String host) {
-        this.host = host;
-    }
-
-    @JsonProperty
     public int getPort() {
         return port;
     }
 
-    @JsonProperty
-    public void setPort(int port) {
-        this.port = port;
-    }
-
-    @JsonProperty
     public String getExchangeName() {
         return exchangeName;
     }
 
-    @JsonProperty
     public String getRoutingKey() {
         return routingKey;
     }
@@ -88,9 +86,9 @@ public class MessageQueueFactory {
         Channel channel = connection.createChannel();
 
         channel.exchangeDeclare(getExchangeName(), exchangeType, exchangeDurable);
-        String queueName = channel.queueDeclare("", queueDurable, isQueueExclusive, isQueueAutoDelete, null).getQueue();
-        System.out.println("queueName: " + queueName);
-        channel.queueBind(queueName, getExchangeName(), getRoutingKey());
+        String generatedQueueName = channel.queueDeclare(queueName, queueDurable, isQueueExclusive, isQueueAutoDelete, null).getQueue();
+        channel.queueBind(generatedQueueName, getExchangeName(), getRoutingKey());
+        LOGGER.info("Queue {} bound to exchange {} with routing key {}", generatedQueueName, getExchangeName(), getRoutingKey());
 
         MessageQueueClient client = new MessageQueueClient(channel, getExchangeName(), getRoutingKey());
 

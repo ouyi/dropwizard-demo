@@ -1,6 +1,7 @@
 package org.bitbucket.ouyi.mq;
 
 import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.MessageProperties;
 
 import java.io.IOException;
 
@@ -20,6 +21,6 @@ public class MessageQueueClient {
     }
 
     public synchronized void publish(String message) throws IOException {
-        channel.basicPublish(exchangeName, routingKey, null, message.getBytes("UTF-8"));
+        channel.basicPublish(exchangeName, routingKey, MessageProperties.PERSISTENT_BASIC, message.getBytes("UTF-8"));
     }
 }

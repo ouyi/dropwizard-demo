@@ -13,45 +13,39 @@ import javax.validation.constraints.NotNull;
  */
 public class File2DbConfiguration extends Configuration {
 
+    @JsonProperty
     private String storageRoot = "/tmp/file2db/upload";
+    @JsonProperty
     private String dateTimePattern = "MM-dd-yyyy HH:mm:ss";
+    @JsonProperty
     private String timezone = "Europe/Berlin";
-
     @Valid
     @NotNull
+    @JsonProperty
     private DataSourceFactory database = new DataSourceFactory();
-
     @Valid
     @NotNull
+    @JsonProperty
     private MessageQueueFactory messageQueue = new MessageQueueFactory();
 
-    @JsonProperty
     public String getStorageRoot() {
         return storageRoot;
     }
 
-    @JsonProperty
     public String getDateTimePattern() {
         return dateTimePattern;
     }
 
-    @JsonProperty
     public String getTimezone() {
         return timezone;
     }
 
-    @JsonProperty("database")
     public DataSourceFactory getDataSourceFactory() {
         return database;
     }
 
-    @JsonProperty("messageQueue")
     public MessageQueueFactory getMessageQueueFactory() {
         return messageQueue;
     }
 
-    @JsonProperty("messageQueue")
-    public void setMessageQueueFactory(MessageQueueFactory factory) {
-        this.messageQueue = factory;
-    }
 }

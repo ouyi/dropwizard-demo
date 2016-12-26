@@ -1,5 +1,10 @@
+
 database:
   driverClass: org.h2.Driver
   user: dba
   password: dba
-  url: jdbc:h2:./build/file2db.h2;IGNORECASE=TRUE;MODE=PostgreSQL
+  url: jdbc:h2:./build/file2db.h2;IGNORECASE=TRUE;MODE=PostgreSQL;DB_CLOSE_DELAY=-1
+
+messageQueue:
+  host: localhost
+  port: 5672
