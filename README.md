@@ -1,6 +1,7 @@
 
 # Assumptions
 
+- We are building a prototype
 - Transformer always has access to the files uploaded
     - centralized storage, e.g., S3 or NAS, or
     - no centralized storage: uploader, mq, and transformer run on the same host (horizontal scaling by host)
@@ -12,6 +13,7 @@
 # Features
 
 - Idempotent and atomic PUT
+- Automatic DB migrations
 
 # End-to-end tests
 
@@ -44,13 +46,12 @@
 
 # TODOs
 
-- File2DbWorker config yml
+- Delete conflicting entries before inserting (no need if not h2)
 - migrations yml
 - Add configuration tests
 - Add integration tests (skipping mq stuff)
+- Add app version
 - CI/CD
-- Delete conflicting entries before inserting (no need if not h2)
 - Add Java doc
 - Clean up PersonDAO
 - Add error handling (retries) to the resources or to the worker
-- Add app version
