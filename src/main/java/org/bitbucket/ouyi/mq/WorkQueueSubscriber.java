@@ -31,4 +31,8 @@ public class WorkQueueSubscriber {
     public Channel getChannel() {
         return channel;
     }
+
+    public boolean isAutoAck() {
+        return autoAck;
+    }
 }

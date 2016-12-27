@@ -1,4 +1,9 @@
 
+server:
+  applicationConnectors:
+    - type: http
+      port: 8080
+
 database:
   driverClass: org.h2.Driver
   user: dba
@@ -8,3 +13,8 @@ database:
 messageQueue:
   host: localhost
   port: 5672
+  exchangeName: filename_exchange
+  exchangeType: direct
+  queueName: filename_queue
+  routingKey: filename_key
+  autoAck: false

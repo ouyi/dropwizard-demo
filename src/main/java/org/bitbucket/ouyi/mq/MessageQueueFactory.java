@@ -1,7 +1,6 @@
 package org.bitbucket.ouyi.mq;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.rabbitmq.client.BuiltinExchangeType;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
@@ -23,6 +22,16 @@ public class MessageQueueFactory {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MessageQueueFactory.class);
 
+    private static final int PREFETCH_COUNT = 1;
+
+    private static final boolean EXCHANGE_DURABLE = true;
+
+    private boolean QUEUE_DURABLE = true;
+
+    private boolean QUEUE_EXCLUSIVE = false;
+
+    private boolean QUEUE_AUTODELETE = false;
+
     @NotEmpty
     @JsonProperty
     private String host = "localhost";
@@ -37,32 +46,17 @@ public class MessageQueueFactory {
     private String exchangeName = "filename_exchange";
 
     @JsonProperty
-    private String exchangeType = BuiltinExchangeType.DIRECT.toString().toLowerCase();
-
-    @JsonProperty
-    private boolean exchangeDurable = true;
+    private String exchangeType = "direct";
 
     @NotEmpty
     @JsonProperty
     private String routingKey = "filename_key";
 
     @JsonProperty
-    private boolean queueDurable = true;
-
-    @JsonProperty
-    private boolean isQueueExclusive = false;
-
-    @JsonProperty
-    private boolean isQueueAutoDelete = false;
-
-    @JsonProperty
     private String queueName = "filename_queue";
 
     @JsonProperty
-    private boolean isAutoAck = false;
-
-    @JsonProperty
-    private int prefetchCount = 1;
+    private boolean autoAck = false;
 
     public String getHost() {
         return host;
@@ -78,6 +72,18 @@ public class MessageQueueFactory {
 
     public String getRoutingKey() {
         return routingKey;
+    }
+
+    public boolean isAutoAck() {
+        return autoAck;
+    }
+
+    public String getQueueName() {
+        return queueName;
+    }
+
+    public String getExchangeType() {
+        return exchangeType;
     }
 
     /**
@@ -110,8 +116,8 @@ public class MessageQueueFactory {
 
     public WorkQueueSubscriber createSubscriber() throws IOException, TimeoutException {
         WorkQueue workQueue = createWorkQueue();
-        workQueue.getChannel().basicQos(prefetchCount);
-        return new WorkQueueSubscriber(workQueue.getChannel(), workQueue.getQueueName(), workQueue.getRoutingKey(), isAutoAck);
+        workQueue.getChannel().basicQos(PREFETCH_COUNT);
+        return new WorkQueueSubscriber(workQueue.getChannel(), workQueue.getQueueName(), workQueue.getRoutingKey(), isAutoAck());
     }
 
     public WorkQueue createWorkQueue() throws IOException, TimeoutException {
@@ -121,8 +127,8 @@ public class MessageQueueFactory {
         Connection connection = factory.newConnection();
         Channel channel = connection.createChannel();
 
-        channel.exchangeDeclare(getExchangeName(), exchangeType, exchangeDurable);
-        String generatedQueueName = channel.queueDeclare(queueName, queueDurable, isQueueExclusive, isQueueAutoDelete, null).getQueue();
+        channel.exchangeDeclare(getExchangeName(), getExchangeType(), EXCHANGE_DURABLE);
+        String generatedQueueName = channel.queueDeclare(getQueueName(), QUEUE_DURABLE, QUEUE_EXCLUSIVE, QUEUE_AUTODELETE, null).getQueue();
         channel.queueBind(generatedQueueName, getExchangeName(), getRoutingKey());
         LOGGER.info("Queue {} bound to exchange {} with routing key {}", generatedQueueName, getExchangeName(), getRoutingKey());
 

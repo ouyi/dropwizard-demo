@@ -51,12 +51,12 @@ public class File2DbWorker {
         Client client = ClientBuilder.newClient();
         WebTarget webTarget = client.target(config.getTransformerEndpoint());
 
-        Consumer consumer = createConsumer(channel, webTarget);
+        Consumer consumer = createConsumer(channel, webTarget, subscriber.isAutoAck());
 
         subscriber.subscribe(consumer);
     }
 
-    private Consumer createConsumer(final Channel channel, final WebTarget webTarget) {
+    private Consumer createConsumer(final Channel channel, final WebTarget webTarget, boolean autoAck) {
         return new DefaultConsumer(channel) {
                 @Override
                 public void handleDelivery(String consumerTag, Envelope envelope,
@@ -65,7 +65,10 @@ public class File2DbWorker {
                     LOGGER.info("Received '" + message + "'");
 
                     webTarget.path(message).request().post(Entity.entity(null, MediaType.WILDCARD_TYPE));
-                    channel.basicAck(envelope.getDeliveryTag(), false);
+
+                    if (!autoAck) {
+                        channel.basicAck(envelope.getDeliveryTag(), false);
+                    }
                 }
             };
     }
