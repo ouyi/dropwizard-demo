@@ -18,3 +18,28 @@ messageQueue:
   queueName: filename_queue
   routingKey: filename_key
   autoAck: false
+
+logging:
+  level: INFO
+  loggers:
+    "org.bitbucket.ouyi":
+      level: INFO
+      additive: false
+      appenders:
+        - type: file
+          currentLogFilename: /tmp/log/file2db-reduced.log
+          archivedLogFilenamePattern: /tmp/log/file2db-reduced-%d.log.gz
+          archivedFileCount: 5
+          timeZone: UTC
+  appenders:
+    - type: console
+      threshold: ALL
+      timeZone: UTC
+      target: stdout
+    - type: file
+      currentLogFilename: /tmp/log/file2db.log
+      threshold: ALL
+      archive: true
+      archivedLogFilenamePattern: /tmp/log/file2db-%d.log.gz
+      archivedFileCount: 5
+      timeZone: UTC
