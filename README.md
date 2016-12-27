@@ -47,7 +47,6 @@
 # TODOs
 
 - Delete conflicting entries before inserting (no need if not h2)
-- migrations yml
 - Add configuration tests
 - Add integration tests (skipping mq stuff)
 - Add app version
