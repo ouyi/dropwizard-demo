@@ -18,19 +18,19 @@ public class PersonDAOTest {
 
     @Test
     public void insertAll() {
-        DBI dbi = new DBI("jdbc:h2:mem:test;IGNORECASE=TRUE;MODE=PostgreSQL");
+        DBI dbi = new DBI("jdbc:h2:mem:test;IGNORECASE=TRUE;MODE=PostgreSQL;DB_CLOSE_DELAY=-1");
+        PersonDAO personDAO = new PersonDAO(dbi);
         try (Handle handle = dbi.open()) {
             handle.createStatement("migrations/1-create-table-person.sql").execute();
+        }
+        List<Person> list = new LinkedList<>();
 
-            PersonDAO personDAO = new PersonDAO(dbi);
-            List<Person> list = new LinkedList<>();
+        ZonedDateTime timeOfStart = ZonedDateTime.now();
+        list.add(new Person(1, "john", timeOfStart));
+        list.add(new Person(2, "mary", timeOfStart));
+        personDAO.insertAll(list.iterator());
 
-            ZonedDateTime timeOfStart = ZonedDateTime.now();
-            list.add(new Person(1, "john", timeOfStart));
-            list.add(new Person(2, "mary", timeOfStart));
-
-            personDAO.insertAll(list.iterator());
-
+        try (Handle handle = dbi.open()) {
             assertThat(handle.createQuery("select * from person").list().size()).isEqualTo(2);
         }
     }
