@@ -46,24 +46,24 @@ dependencies {
 mainClassName = 'org.bitbucket.ouyi.File2DbApplication'
 
 task dbStatus(type: JavaExec, dependsOn: 'classes') {
-    args 'db', 'status', 'build/resources/main/file2db.yml'
+    args 'db', 'status', 'build/resources/test/file2db.yml'
     classpath = sourceSets.main.runtimeClasspath
     main = mainClassName
 }
 
 task dbMigrate(type: JavaExec, dependsOn: 'classes') {
-    args 'db', 'migrate', 'build/resources/main/file2db.yml'
+    args 'db', 'migrate', 'build/resources/test/file2db.yml'
     classpath = sourceSets.main.runtimeClasspath
     main = mainClassName
 }
 
 run {
     dependsOn dbMigrate
-    args 'server', 'build/resources/main/file2db.yml'
+    args 'server', 'build/resources/test/file2db.yml'
 }
 
 task dbDropall(type: JavaExec, dependsOn: 'classes') {
-    args 'db', 'drop-all', '--confirm-delete-everything', 'build/resources/main/file2db.yml'
+    args 'db', 'drop-all', '--confirm-delete-everything', 'build/resources/test/file2db.yml'
     classpath = sourceSets.main.runtimeClasspath
     main = mainClassName
 }

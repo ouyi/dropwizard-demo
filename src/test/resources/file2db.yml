@@ -1,4 +1,8 @@
 
+storageRoot: /tmp/file2db/upload
+dateTimePattern: MM-dd-yyyy HH:mm:ss
+timezone: Europe/Berlin
+
 server:
   applicationConnectors:
     - type: http

@@ -46,11 +46,10 @@
 
 # TODOs
 
-- Delete conflicting entries before inserting (no need if not h2)
 - Add configuration tests
 - Add integration tests (skipping mq stuff)
 - Add app version
 - CI/CD
+- Use postgres and tests with real data
 - Add Java doc
-- Clean up PersonDAO
 - Add error handling (retries) to the resources or to the worker
