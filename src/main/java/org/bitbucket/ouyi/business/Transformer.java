@@ -33,9 +33,9 @@ public class Transformer {
     }
 
     public void transform(Stream<String> lines) throws Exception {
+        // distinct is done on the database level
         Iterator<Person> iterator = lines
                 .map(parseLine.andThen(removeObs.andThen(nameToLowercase.andThen(toPersonUTC))))
-                .distinct()
                 .iterator();
         personDAO.insertAll(iterator);
     }

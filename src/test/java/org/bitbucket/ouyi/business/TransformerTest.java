@@ -1,20 +1,25 @@
 package org.bitbucket.ouyi.business;
 
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import liquibase.util.csv.opencsv.CSVParser;
 import org.bitbucket.ouyi.io.PersonDAO;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.skife.jdbi.v2.DBI;
-import org.skife.jdbi.v2.Handle;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.MockitoAnnotations;
 
 import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
+import java.util.Iterator;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 /**
  * Created by worker on 12/22/16.
@@ -23,14 +28,12 @@ public class TransformerTest {
 
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss").withZone(ZoneId.of("Europe/Berlin"));
 
+    @Captor
+    private ArgumentCaptor<Iterator<Person>> argumentCaptor;
+
     @Before
-    public void setUp() throws Exception {
-
-    }
-
-    @After
-    public void tearDown() throws Exception {
-
+    public void init(){
+        MockitoAnnotations.initMocks(this);
     }
 
     @Test
@@ -44,28 +47,52 @@ public class TransformerTest {
     @Test
     public void transform() throws Exception {
 
-        DBI dbi = new DBI("jdbc:h2:mem:test;IGNORECASE=TRUE;MODE=PostgreSQL");
-        try (Handle handle = dbi.open()) {
-            handle.createStatement("migrations/1-create-table-person.sql").execute();
+        PersonDAO personDAO = mock(PersonDAO.class);
 
-            PersonDAO personDAO = new PersonDAO(dbi);
+        Transformer transformer = new Transformer(new CSVParser(), formatter, personDAO);
+        Stream<String> lines = Stream.of(
+                "1,John,12-06-1980 12:00:12,Some observations",
+                "1,John,12-06-1980 12:00:12,Some observation",
+                "2,Mary,12-06-1981 12:00:12,Some other observations"
+        );
 
-            Transformer transformer = new Transformer(new CSVParser(), formatter, personDAO);
-            Stream<String> lines = Stream.of(
-                    "1,John,12-06-1980 12:00:12,Some observations",
-                    "1,John,12-06-1980 12:00:12,Some observation",
-                    "2,Mary,12-06-1981 12:00:12,Some other observations"
-            );
+        Person[] expected = {
+                new Person(1, "john", ZonedDateTime.parse("12-06-1980 12:00:12", formatter).withZoneSameInstant(ZoneOffset.UTC)),
+                new Person(1, "john", ZonedDateTime.parse("12-06-1980 12:00:12", formatter).withZoneSameInstant(ZoneOffset.UTC)),
+                new Person(2, "mary", ZonedDateTime.parse("12-06-1981 12:00:12", formatter).withZoneSameInstant(ZoneOffset.UTC)),
+        };
 
-            transformer.transform(lines);
-            List<Person> records = handle.createQuery("select id, name, time_of_start from person").map(new PersonDAO.PersonMapper()).list();
-            assertThat(records.size()).isEqualTo(2);
+        transformer.transform(lines);
+        verify(personDAO).insertAll(argumentCaptor.capture());
 
-            Person john = handle.createQuery("select id, name, time_of_start from person where id = :id").bind("id", 1).map(new PersonDAO.PersonMapper()).first();
-            assertThat(john).isNotNull();
-            assertThat(john.getName()).isEqualTo("john");
-            assertThat(john.getTimeOfStart().format(formatter)).isEqualTo("12-06-1980 12:00:12");
+        Iterator<Person> arg = argumentCaptor.getValue();
+        Person[] actual = Iterables.toArray(Lists.newArrayList(arg), Person.class);
+        assertThat(actual.length).isEqualTo(expected.length);
+        assertThat(matchAll(actual, expected)).isTrue();
+    }
+
+    private boolean matchAll(Person[] a, Person[] b) {
+        if (a.length != b.length) {
+            return false;
         }
+        for (int i = 0; i < a.length; i++) {
+            if (!matchPerson(a[i], b[i])) {
+                return false;
+            }
+        }
+        return true;
+    }
 
+    private boolean matchPerson(Person p1, Person p2) {
+        if (p1.getId() != p2.getId()) {
+            return false;
+        }
+        if (!p1.getName().equals(p2.getName())) {
+            return false;
+        }
+        if (!p1.getTimeOfStart().equals(p2.getTimeOfStart())) {
+            return false;
+        }
+        return true;
     }
 }
