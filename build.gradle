@@ -49,7 +49,6 @@ mainClassName = 'org.bitbucket.ouyi.File2DbApplication'
 test {
     exclude '**/IntegrationTest.class'
     testLogging {
-        // showStandardStreams = true
         events "PASSED", "FAILED", "SKIPPED"
     }
 }
