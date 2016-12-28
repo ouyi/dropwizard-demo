@@ -32,10 +32,19 @@ public class Transformer {
         this.personDAO = personDAO;
     }
 
+    /**
+     * Transform the input lines based on the business logic.
+     * Note the use of the blocking operator <code>distinct</code> here to remove duplicates from the lines
+     * (at the file level). The duplicate removal here can be omitted safely, if it is also ensured at
+     * the database level. See also {@link PersonDAO#insertAll(Iterator)}.
+     *
+     * @param lines
+     * @throws Exception
+     */
     public void transform(Stream<String> lines) throws Exception {
-        // distinct is done on the database level
         Iterator<Person> iterator = lines
                 .map(parseLine.andThen(removeObs.andThen(nameToLowercase.andThen(toPersonUTC))))
+                .distinct()
                 .iterator();
         personDAO.insertAll(iterator);
     }
