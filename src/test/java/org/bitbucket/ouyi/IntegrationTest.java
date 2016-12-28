@@ -37,37 +37,6 @@ public class IntegrationTest {
             File2DbApplication.class, ResourceHelpers.resourceFilePath("file2db.yml"));
 
     @Test
-    public void testWithoutMessageQueue() throws IOException {
-        final DBIFactory factory = new DBIFactory();
-        final DBI dbi = factory.build(RULE.getEnvironment(), RULE.getConfiguration().getDataSourceFactory(), "h2");
-        try (Handle handle = dbi.open()) {
-            String createTableSql = "migrations/1-create-table-person.sql";
-            handle.createStatement(createTableSql).execute();
-            handle.createStatement("delete from person").execute();
-        }
-        Client client = new JerseyClientBuilder().build();
-        String testFile = "test.csv";
-        byte[] data = Files.readAllBytes(Paths.get(ResourceHelpers.resourceFilePath(testFile)));
-        Response response;
-        response = client.target(String.format("http://localhost:%d/upload", RULE.getLocalPort()))
-                .path(testFile)
-                .request()
-                .put(Entity.entity(data, MediaType.APPLICATION_OCTET_STREAM));
-        assertThat(response.getStatus()).isEqualTo(200);
-
-        assertThat(Files.readAllBytes(Paths.get(RULE.getConfiguration().getStorageRoot(), testFile))).isEqualTo(data);
-
-        response = client.target(String.format("http://localhost:%d/transform", RULE.getLocalPort()))
-                .path(testFile)
-                .request()
-                .post(Entity.entity(null, MediaType.WILDCARD_TYPE));
-        assertThat(response.getStatus()).isEqualTo(200);
-        try (Handle handle = dbi.open()) {
-            assertThat(handle.createQuery("select * from person").list().size()).isEqualTo(2);
-        }
-    }
-
-    @Test
     public void testWithMessageQueue() throws IOException, InterruptedException {
         final DBIFactory factory = new DBIFactory();
         final DBI dbi = factory.build(RULE.getEnvironment(), RULE.getConfiguration().getDataSourceFactory(), "h2");
