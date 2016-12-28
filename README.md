@@ -42,11 +42,9 @@ The following tests are done successfully in this env:
     OpenJDK Runtime Environment (build 1.8.0_111-b15)
     OpenJDK 64-Bit Server VM (build 25.111-b15, mixed mode)
 
-## Unit tests
+## Build (includes unit tests) and poor man's packaging
 
-    unzip file2db.zip
-    cd file2db
-    ./gradlew test
+    ./gradlew clean build && ./gradlew distZip && unzip build/distributions/file2db.zip -d build/distributions/
 
 ## Integration test
 
@@ -56,19 +54,18 @@ The following tests are done successfully in this env:
 
 - Integration test
 
-        ./gradlew clean integrationTest
+        ./gradlew integrationTest
 
 ## Manual end-to-end tests
 
-- Start services
+- Start the file2db application (services)
 
         ./gradlew run
     or
 
-        ./gradlew distZip && unzip build/distributions/file2db.zip -d build/distributions/
         build/distributions/file2db/bin/file2db server build/resources/test/file2db.yml
 
-- Start worker
+- Start the worker application
 
         java -cp "./build/distributions/file2db/lib/*" org.bitbucket.ouyi.mq.File2DbWorker -c build/resources/test/worker.yml
 
