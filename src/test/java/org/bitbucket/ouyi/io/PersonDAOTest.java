@@ -22,6 +22,7 @@ public class PersonDAOTest {
         PersonDAO personDAO = new PersonDAO(dbi);
         try (Handle handle = dbi.open()) {
             handle.createStatement("migrations/1-create-table-person.sql").execute();
+            handle.createStatement("delete from person").execute();
         }
         List<Person> list = new LinkedList<>();
 
