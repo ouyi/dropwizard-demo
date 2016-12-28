@@ -21,8 +21,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Created by worker on 12/27/16.
+ *
+ * Note this requires a running rabbitmq instance.
+ *
  */
-public class Integration {
+public class IntegrationTest {
 
     @Rule
     public final DropwizardAppRule<File2DbConfiguration> RULE = new DropwizardAppRule<>(
