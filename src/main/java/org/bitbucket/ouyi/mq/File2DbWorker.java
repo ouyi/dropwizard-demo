@@ -62,12 +62,12 @@ public class File2DbWorker {
                 public void handleDelivery(String consumerTag, Envelope envelope,
                                            AMQP.BasicProperties properties, byte[] body) throws IOException {
                     String message = new String(body, "UTF-8");
-                    LOGGER.info("Received '" + message + "'");
-
+                    LOGGER.info("Received '{}'", message);
                     webTarget.path(message).request().post(Entity.entity(null, MediaType.WILDCARD_TYPE));
-
+                    LOGGER.info("Processed '{}'", message);
                     if (!autoAck) {
                         channel.basicAck(envelope.getDeliveryTag(), false);
+                        LOGGER.debug("Ack'ed message: '{}' with tag: '{}'", message, envelope.getDeliveryTag());
                     }
                 }
             };

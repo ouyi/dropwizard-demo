@@ -21,13 +21,17 @@
 
     docker run -p 15671:15671 -p 15672:15672 -p 25672:25672 -p 4369:4369 -p 5671:5671 -p 5672:5672 -d --hostname b50 --name rabbit0 -e RABBITMQ_DEFAULT_USER=guest -e RABBITMQ_DEFAULT_PASS=guest rabbitmq:3-managemen
 
+- Integration test
+
+    ./gradlew clean integrationTest
+
 - Start services
 
     ./gradlew run
 
 - Start worker
 
-    unzip build/distributions/file2db.zip -d build/distributions/
+    ./gradlew distZip && unzip build/distributions/file2db.zip -d build/distributions/
     java -cp "./build/distributions/file2db/lib/*" org.bitbucket.ouyi.mq.File2DbWorker -c build/resources/test/worker.yml
 
 - File upload
