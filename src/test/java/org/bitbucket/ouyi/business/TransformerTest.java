@@ -85,7 +85,8 @@ public class TransformerTest {
                 "2,Marrie Angelina,12-6-89 12:00:12,Did not want to buy second plan,,",
                 "2,Marrie Angelina,12-6-86 12:00:12,Did not want to buy second plan,,",
                 "1,John McDonalds,12-6-86 12:00:12,McDonalds,,",
-                ",,,,,"
+                ",,,,,",
+                "7,You Have Completed the Test,28-08-2016 00:00:00, You are removing this Column,,"
         );
         Person[] expected = {
                 new Person(1, "john", ZonedDateTime.parse("12-06-1980 12:00:12", formatter).withZoneSameInstant(ZoneOffset.UTC)),
