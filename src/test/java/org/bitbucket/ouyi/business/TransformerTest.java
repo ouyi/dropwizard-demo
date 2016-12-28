@@ -88,8 +88,8 @@ public class TransformerTest {
                 ",,,,,"
         );
         Person[] expected = {
-                new Person(2, "marrie angelina", ZonedDateTime.parse("12-06-1986 12:00:12", formatter).withZoneSameInstant(ZoneOffset.UTC)),
-                new Person(1, "john mcdonalds", ZonedDateTime.parse("12-06-1986 12:00:12", formatter).withZoneSameInstant(ZoneOffset.UTC))
+                new Person(1, "john", ZonedDateTime.parse("12-06-1980 12:00:12", formatter).withZoneSameInstant(ZoneOffset.UTC)),
+                new Person(2, "marrie angelina", ZonedDateTime.parse("12-06-1981 12:00:12", formatter).withZoneSameInstant(ZoneOffset.UTC))
         };
 
         PersonDAO personDAO = mock(PersonDAO.class);

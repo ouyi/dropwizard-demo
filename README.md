@@ -8,7 +8,7 @@
 - The upload API caller dictates the file name on the server side, without directory structure (can be added in future iterations)
 - Re-uploading a file will overwrite the previously uploaded version
 - On DB primary key conflict, the conflicting entries in the DB will be deleted (and overwritten)
-- No other data cleansing required (e.g., id is valid int)
+- Dirty records (e.g., name is empty, or time_of_start does not match the pattern: MM-dd-yyyy HH:mm:ss) are dropped
 
 # Features
 

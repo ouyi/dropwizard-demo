@@ -2,6 +2,8 @@ package org.bitbucket.ouyi.business;
 
 import liquibase.util.csv.opencsv.CSVParser;
 import org.bitbucket.ouyi.io.PersonDAO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -11,6 +13,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
@@ -18,9 +21,12 @@ import java.util.stream.Stream;
  */
 public class Transformer {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(Transformer.class);
+
     public static final int ID_INDEX = 0;
     public static final int NAME_INDEX = 1;
     public static final int TIME_INDEX = 2;
+    public static final int RECORD_DIMENSION = 3;
 
     private CSVParser parser;
     private DateTimeFormatter dateTimeFormat;
@@ -43,10 +49,31 @@ public class Transformer {
      */
     public void transform(Stream<String> lines) throws Exception {
         Iterator<Person> iterator = lines
-                .map(parseLine.andThen(removeObs.andThen(nameToLowercase.andThen(toPersonUTC))))
+                .map(parseLine)
+                .filter(validRecord)
+                .map(nameToLowercase.andThen(toPersonUTC))
+                .filter(p -> (p != null))
                 .distinct()
                 .iterator();
         personDAO.insertAll(iterator);
+    }
+
+    protected Predicate<String[]> validRecord = record -> {
+        if (record.length < RECORD_DIMENSION) {
+            return false;
+        }
+        String id = record[0];
+        String name = record[1];
+        String timeOfStart = record[2];
+
+        if (isNullOrEmpty(id) || !id.matches("^\\d+$") || isNullOrEmpty(name) || isNullOrEmpty(timeOfStart)) {
+            return false;
+        }
+        return true;
+    };
+
+    private static boolean isNullOrEmpty(String s) {
+        return s == null || s.isEmpty();
     }
 
     protected Function<String, String[]> parseLine = l -> {
@@ -57,16 +84,19 @@ public class Transformer {
         }
     };
 
-    // Assumption: Obs. is the last element
-    protected Function<String[], String[]> removeObs = s -> Arrays.copyOfRange(s, 0, s.length - 1);
-
     protected Function<String[], String[]> nameToLowercase = s -> {
         s[NAME_INDEX] = s[NAME_INDEX].toLowerCase();
         return s;
     };
 
     protected Function<String[], Person> toPersonUTC = s -> {
-        ZonedDateTime dateTime = ZonedDateTime.parse(s[TIME_INDEX], dateTimeFormat);
-        return new Person(Integer.parseInt(s[ID_INDEX]), s[NAME_INDEX], dateTime.withZoneSameInstant(ZoneOffset.UTC));
+        // Other fields of the record are implicitly dropped
+        try {
+            ZonedDateTime dateTime = ZonedDateTime.parse(s[TIME_INDEX], dateTimeFormat);
+            return new Person(Integer.parseInt(s[ID_INDEX]), s[NAME_INDEX], dateTime.withZoneSameInstant(ZoneOffset.UTC));
+        } catch (Throwable t) {
+            LOGGER.error("Person record: {} could not be parsed due to error: {}", Arrays.toString(s), t.getMessage());
+        }
+        return null;
     };
 }
