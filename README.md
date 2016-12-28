@@ -36,7 +36,7 @@ separate services.
 
 # Tests
 
-The following tests are done successfully in this env:
+The following tests (including a test with the provided data set data_test.zip) are done successfully in this env:
 
     CentOS Linux release 7.3.1611 (Core) 
     OpenJDK Runtime Environment (build 1.8.0_111-b15)
