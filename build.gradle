@@ -46,6 +46,21 @@ dependencies {
 
 mainClassName = 'org.bitbucket.ouyi.File2DbApplication'
 
+test {
+    exclude '**/IntegrationTest.class'
+    testLogging {
+        // showStandardStreams = true
+        events "PASSED", "FAILED", "SKIPPED"
+    }
+}
+
+task integrationTest (type: Test){
+    include "**/IntegrationTest.class"
+    testLogging {
+        showStandardStreams = true
+    }
+}
+
 task dbStatus(type: JavaExec, dependsOn: 'classes') {
     args 'db', 'status', testConfigFile
     classpath = sourceSets.main.runtimeClasspath

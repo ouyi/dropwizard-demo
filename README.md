@@ -46,10 +46,8 @@
 
 # TODOs
 
-- Add configuration tests
-- Add integration tests (skipping mq stuff)
 - Add app version
 - CI/CD
-- Use postgres and tests with real data
+- Use postgres and e2e tests with real data
 - Add Java doc
 - Add error handling (retries) to the resources or to the worker
