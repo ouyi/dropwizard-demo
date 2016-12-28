@@ -80,7 +80,8 @@ The following tests (including a test with the provided data set data_test.zip) 
 
 - Verify data in the database
 
-        # connect to the database using connection data of build/resources/test/file2db.yml
+        # After stoppig the file2db application, connect to the database using the database connection 
+        # data from build/resources/test/file2db.yml
         java -cp ./build/distributions/file2db/lib/h2-1.4.193.jar org.h2.tools.Shell
         sql> select count(1) from person;
 
