@@ -11,7 +11,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 
 /**
- * Created by worker on 12/20/16.
+ * Exposes the endpoint for file transformation.
  */
 @Path("/transform")
 public class TransformResource {

@@ -17,7 +17,7 @@ import java.io.IOException;
 import static java.nio.file.Files.copy;
 
 /**
- * Created by worker on 12/16/16.
+ * Exposes the endpoint for file upload.
  */
 @Path("/upload")
 public class UploadResource {

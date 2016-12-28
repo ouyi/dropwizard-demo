@@ -13,9 +13,6 @@ import java.nio.file.Paths;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * Created by worker on 12/25/16.
- */
 public class FileStorageTest {
 
     @Rule

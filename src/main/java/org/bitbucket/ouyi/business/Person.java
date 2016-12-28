@@ -4,7 +4,7 @@ import java.time.ZonedDateTime;
 import java.util.Objects;
 
 /**
- * Created by worker on 12/21/16.
+ * Transfer object for <code>Person</code>.
  */
 public class Person {
     private final int id;

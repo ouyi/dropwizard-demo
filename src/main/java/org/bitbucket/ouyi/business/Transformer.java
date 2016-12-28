@@ -17,7 +17,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
- * Created by worker on 12/21/16.
+ * Contains the logic of data cleansing and transformation.
  */
 public class Transformer {
 

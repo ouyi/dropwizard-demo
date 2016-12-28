@@ -16,7 +16,7 @@ import java.time.ZonedDateTime;
 import java.util.Iterator;
 
 /**
- * Created by worker on 12/21/16.
+ * Responsible for accessing DB.
  */
 public class PersonDAO {
 

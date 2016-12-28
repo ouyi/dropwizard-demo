@@ -23,10 +23,7 @@ import java.nio.file.Paths;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Created by worker on 12/27/16.
- *
  * Note this requires a running rabbitmq instance.
- *
  */
 public class IntegrationTest {
 

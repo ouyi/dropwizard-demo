@@ -16,7 +16,11 @@ import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
 /**
- * Created by worker on 12/25/16.
+ * Responsible for setting up the message queue based on the work queue model and creating the corresponding
+ * publisher and subscriber.
+ *
+ * All fields marked with <code>@JsonProperty</code> are configurable. The remaining constants can be easily
+ * made configurable in the same fashion.
  */
 public class MessageQueueFactory {
 
@@ -87,7 +91,7 @@ public class MessageQueueFactory {
     }
 
     /**
-     * Build with lifecycle hooks set up, if the parameter environment is not null.
+     * Build with lifecycle hooks set up.
      *
      * @param environment optional
      */

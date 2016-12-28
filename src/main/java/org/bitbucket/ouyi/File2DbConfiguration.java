@@ -9,7 +9,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 /**
- * Created by worker on 12/18/16.
+ * An instance of this class will be created by the framework based on the yml config file.
+ *
+ * All fields marked with <code>@JsonProperty</code> are configurable.
  */
 public class File2DbConfiguration extends Configuration {
 
