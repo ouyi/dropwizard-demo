@@ -7,6 +7,7 @@ The file2db application (entry point: `org.bitbucket.ouyi.File2DbApplication`) e
     POST    /transform/{filename} (org.bitbucket.ouyi.api.TransformResource)
 
 External dependencies of the application:
+
 - message queue (tested with rabbitmq)
 - database (configured to use h2 in the following sections)
 
@@ -19,7 +20,7 @@ For simplicity, the file2db application and the worker application are implement
 nothing prevents them from being deployed separately. The file2db application can also be easily deployed as two 
 separate services.
 
-# Assumptions
+## Assumptions
 
 - Transformer always has access to the files uploaded, which is possible in either of the following cases:
     - centralized storage, e.g., S3 or NAS, or
@@ -29,12 +30,12 @@ separate services.
 - On DB primary key conflict, the conflicting entries in the DB will be deleted (and overwritten)
 - Dirty records (e.g., name is empty, or time_of_start does not match the pattern: MM-dd-yyyy HH:mm:ss) are dropped
 
-# Features
+## Features
 
 - Idempotent and atomic PUT and POST
 - Automatic DB migrations (table creation, schema evolution, etc)
 
-# Tests
+## Tests
 
 The following tests (including a test with the provided data set data_test.zip) are done successfully in this env:
 
@@ -42,11 +43,11 @@ The following tests (including a test with the provided data set data_test.zip) 
     OpenJDK Runtime Environment (build 1.8.0_111-b15)
     OpenJDK 64-Bit Server VM (build 25.111-b15, mixed mode)
 
-## Build (includes unit tests) and poor man's packaging
+### Build (includes unit tests) and poor man's packaging
 
     ./gradlew clean build && ./gradlew distZip && unzip build/distributions/file2db.zip -d build/distributions/
 
-## Integration test
+### Integration test
 
 - Start rabbitmq
 
@@ -56,7 +57,7 @@ The following tests (including a test with the provided data set data_test.zip) 
 
         ./gradlew integrationTest
 
-## Manual end-to-end tests
+### Manual end-to-end tests
 
 - Start the file2db application (services)
 
@@ -85,7 +86,7 @@ The following tests (including a test with the provided data set data_test.zip) 
         java -cp ./build/distributions/file2db/lib/h2-1.4.193.jar org.h2.tools.Shell
         sql> select count(1) from person;
 
-# TODOs
+## TODOs
 
 - Add error handling (retries) to the resources or to the worker
 - More CI/CD stuff (Jenkins, Ansible, Docker, packaging, etc)
