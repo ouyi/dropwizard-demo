@@ -65,6 +65,8 @@ The following tests (including a test with the provided data set data_test.zip) 
         ./gradlew run
     or
 
+        build/distributions/file2db/bin/file2db db status build/resources/test/file2db.yml
+        build/distributions/file2db/bin/file2db db migrate build/resources/test/file2db.yml
         build/distributions/file2db/bin/file2db server build/resources/test/file2db.yml
 
 - Start the worker application
