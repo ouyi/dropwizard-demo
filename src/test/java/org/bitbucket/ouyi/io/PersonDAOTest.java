@@ -24,8 +24,8 @@ public class PersonDAOTest {
         List<Person> list = new LinkedList<>();
 
         ZonedDateTime timeOfStart = ZonedDateTime.now();
-        list.add(new Person(1, "john", timeOfStart));
-        list.add(new Person(2, "mary", timeOfStart));
+        list.add(new Person(1, "alice", timeOfStart));
+        list.add(new Person(2, "bob", timeOfStart));
         personDAO.insertAll(list.iterator());
 
         try (Handle handle = dbi.open()) {

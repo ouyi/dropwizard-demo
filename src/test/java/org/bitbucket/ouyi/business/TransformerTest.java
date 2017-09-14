@@ -44,13 +44,13 @@ public class TransformerTest {
     @Test
     public void transform() throws Exception {
         Stream<String> inputLines = Stream.of(
-                "1,John,12-06-1980 12:00:12,Some observations",
-                "1,John,12-06-1980 12:00:12,Some observation",
-                "2,Mary,12-06-1981 12:00:12,Some other observations"
+                "1,Alice,11-16-1980 12:00:12,Some observations",
+                "1,Alice,11-16-1980 12:00:12,Some observation",
+                "2,Bob,11-06-1981 12:00:12,Some other observations"
         );
         Person[] expected = {
-                new Person(1, "john", ZonedDateTime.parse("12-06-1980 12:00:12", formatter).withZoneSameInstant(ZoneOffset.UTC)),
-                new Person(2, "mary", ZonedDateTime.parse("12-06-1981 12:00:12", formatter).withZoneSameInstant(ZoneOffset.UTC)),
+                new Person(1, "alice", ZonedDateTime.parse("11-16-1980 12:00:12", formatter).withZoneSameInstant(ZoneOffset.UTC)),
+                new Person(2, "bob", ZonedDateTime.parse("11-06-1981 12:00:12", formatter).withZoneSameInstant(ZoneOffset.UTC)),
         };
 
         PersonDAO personDAO = mock(PersonDAO.class);
@@ -65,12 +65,12 @@ public class TransformerTest {
     }
 
     @Test
-    public void transformRealData() throws Exception {
+    public void transformMoreData() throws Exception {
         Stream<String> inputLines = Stream.of(
-                "Id,name,time_of_start,Obs.,,",
-                "1,John,12-06-1980 12:00:12,Not satisfied,,",
-                "1,John,12-06-1980 12:00:12,Satisfied,,",
-                "2,Marrie Angelina,12-06-1981 12:00:12,Did not want to buy second plan,,",
+                "Id,name,time_of_start,comments,,",
+                "1,John,12-06-1980 12:00:12,Foo,,",
+                "1,John,12-06-1980 12:00:12,Bar,,",
+                "2,Charlie Foobar,12-06-1981 12:00:12,Foo bar,,",
                 "3,,,,,",
                 "4,,,,,",
                 "1,John,12-06-1980 12:00:12,Not satisfied,,",
@@ -78,16 +78,16 @@ public class TransformerTest {
                 "4,,,,,",
                 "4,,,,,",
                 "4,,,,,",
-                "2,Marrie Angelina,12-6-84 12:00:12,Did not want to buy second plan,,",
-                "2,Marrie Angelina,12-6-89 12:00:12,Did not want to buy second plan,,",
-                "2,Marrie Angelina,12-6-86 12:00:12,Did not want to buy second plan,,",
-                "1,John McDonalds,12-6-86 12:00:12,McDonalds,,",
+                "2,Charlie Foobar,12-6-84 12:00:12,Foo bar,,",
+                "2,Charlie Foobar,12-6-89 12:00:12,Foo bar,,",
+                "2,Charlie Foobar,12-6-86 12:00:12,Foo bar,,",
+                "1,Foo Bar,12-6-86 12:00:12,FooBar,,",
                 ",,,,,",
-                "7,You Have Completed the Test,28-08-2016 00:00:00, You are removing this Column,,"
+                "7,This is the last line,28-08-2016 00:00:00, This column is supposed to be removed,,"
         );
         Person[] expected = {
                 new Person(1, "john", ZonedDateTime.parse("12-06-1980 12:00:12", formatter).withZoneSameInstant(ZoneOffset.UTC)),
-                new Person(2, "marrie angelina", ZonedDateTime.parse("12-06-1981 12:00:12", formatter).withZoneSameInstant(ZoneOffset.UTC))
+                new Person(2, "charlie foobar", ZonedDateTime.parse("12-06-1981 12:00:12", formatter).withZoneSameInstant(ZoneOffset.UTC))
         };
 
         PersonDAO personDAO = mock(PersonDAO.class);
