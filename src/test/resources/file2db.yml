@@ -26,7 +26,7 @@ messageQueue:
 logging:
   level: INFO
   loggers:
-    "org.bitbucket.ouyi":
+    "io.github.ouyi.dwdemo":
       level: INFO
       additive: false
       appenders:

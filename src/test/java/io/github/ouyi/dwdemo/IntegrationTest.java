@@ -1,9 +1,9 @@
-package org.bitbucket.ouyi;
+package io.github.ouyi.dwdemo;
 
 import io.dropwizard.jdbi.DBIFactory;
 import io.dropwizard.testing.ResourceHelpers;
 import io.dropwizard.testing.junit.DropwizardAppRule;
-import org.bitbucket.ouyi.mq.File2DbWorker;
+import io.github.ouyi.dwdemo.mq.File2DbWorker;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.junit.Rule;
 import org.junit.Test;

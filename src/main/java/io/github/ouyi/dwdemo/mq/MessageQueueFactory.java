@@ -1,4 +1,4 @@
-package org.bitbucket.ouyi.mq;
+package io.github.ouyi.dwdemo.mq;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.rabbitmq.client.Channel;

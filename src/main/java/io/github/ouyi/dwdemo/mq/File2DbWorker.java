@@ -1,4 +1,4 @@
-package org.bitbucket.ouyi.mq;
+package io.github.ouyi.dwdemo.mq;
 
 /**
  * Created by worker on 12/26/16.

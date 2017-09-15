@@ -1,4 +1,4 @@
-package org.bitbucket.ouyi.mq;
+package io.github.ouyi.dwdemo.mq;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;

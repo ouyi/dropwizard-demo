@@ -1,4 +1,4 @@
-package org.bitbucket.ouyi;
+package io.github.ouyi.dwdemo;
 
 import io.dropwizard.Application;
 import io.dropwizard.db.DataSourceFactory;
@@ -6,14 +6,13 @@ import io.dropwizard.jdbi.DBIFactory;
 import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import io.github.ouyi.dwdemo.api.TransformResource;
+import io.github.ouyi.dwdemo.api.UploadResource;
+import io.github.ouyi.dwdemo.io.FileStorage;
+import io.github.ouyi.dwdemo.io.PersonDAO;
 import liquibase.util.csv.opencsv.CSVParser;
-import org.bitbucket.ouyi.api.TransformResource;
-import org.bitbucket.ouyi.api.UploadResource;
-import org.bitbucket.ouyi.business.Transformer;
-import org.bitbucket.ouyi.io.FileStorage;
-import org.bitbucket.ouyi.io.PersonDAO;
-import org.bitbucket.ouyi.mq.WorkQueue;
-import org.bitbucket.ouyi.mq.WorkQueuePublisher;
+import io.github.ouyi.dwdemo.business.Transformer;
+import io.github.ouyi.dwdemo.mq.WorkQueuePublisher;
 import org.skife.jdbi.v2.DBI;
 
 import java.nio.file.Files;

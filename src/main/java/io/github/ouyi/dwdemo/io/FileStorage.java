@@ -1,4 +1,4 @@
-package org.bitbucket.ouyi.io;
+package io.github.ouyi.dwdemo.io;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;

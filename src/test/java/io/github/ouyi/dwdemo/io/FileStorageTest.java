@@ -1,4 +1,4 @@
-package org.bitbucket.ouyi.io;
+package io.github.ouyi.dwdemo.io;
 
 import org.junit.Rule;
 import org.junit.Test;

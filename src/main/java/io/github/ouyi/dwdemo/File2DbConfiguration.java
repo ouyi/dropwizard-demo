@@ -1,9 +1,9 @@
-package org.bitbucket.ouyi;
+package io.github.ouyi.dwdemo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.Configuration;
 import io.dropwizard.db.DataSourceFactory;
-import org.bitbucket.ouyi.mq.MessageQueueFactory;
+import io.github.ouyi.dwdemo.mq.MessageQueueFactory;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;

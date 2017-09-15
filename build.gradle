@@ -44,7 +44,7 @@ dependencies {
     testCompile group: 'io.dropwizard', name: 'dropwizard-testing', version: dropwizardVersion
 }
 
-mainClassName = 'org.bitbucket.ouyi.File2DbApplication'
+mainClassName = 'io.github.ouyi.dwdemo.File2DbApplication'
 
 test {
     exclude '**/IntegrationTest.class'

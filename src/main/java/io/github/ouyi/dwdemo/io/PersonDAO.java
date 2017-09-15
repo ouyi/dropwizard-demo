@@ -1,7 +1,7 @@
-package org.bitbucket.ouyi.io;
+package io.github.ouyi.dwdemo.io;
 
 import com.codahale.metrics.annotation.Timed;
-import org.bitbucket.ouyi.business.Person;
+import io.github.ouyi.dwdemo.business.Person;
 import org.skife.jdbi.v2.DBI;
 import org.skife.jdbi.v2.Handle;
 import org.skife.jdbi.v2.StatementContext;

@@ -1,8 +1,7 @@
-package org.bitbucket.ouyi.api;
+package io.github.ouyi.dwdemo.api;
 
-import org.bitbucket.ouyi.io.FileStorage;
-import org.bitbucket.ouyi.mq.WorkQueue;
-import org.bitbucket.ouyi.mq.WorkQueuePublisher;
+import io.github.ouyi.dwdemo.io.FileStorage;
+import io.github.ouyi.dwdemo.mq.WorkQueuePublisher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

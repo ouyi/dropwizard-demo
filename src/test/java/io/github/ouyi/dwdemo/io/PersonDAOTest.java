@@ -1,6 +1,6 @@
-package org.bitbucket.ouyi.io;
+package io.github.ouyi.dwdemo.io;
 
-import org.bitbucket.ouyi.business.Person;
+import io.github.ouyi.dwdemo.business.Person;
 import org.junit.Test;
 import org.skife.jdbi.v2.DBI;
 import org.skife.jdbi.v2.Handle;
