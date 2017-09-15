@@ -13,7 +13,7 @@ apply plugin: 'application'
 
 project.ext {
     dropwizardVersion = '1.0.5'
-    testConfigFile = 'build/resources/test/file2db.yml'
+    testConfigFile = 'build/resources/test/dwdemo.yml'
 }
 
 // In this section you declare where to find the dependencies of your project

@@ -52,7 +52,7 @@ public class File2DbApplication extends Application<File2DbConfiguration>{
 
     @Override
     public String getName() {
-        return "file2db";
+        return "dwdemo";
     }
 
     @Override

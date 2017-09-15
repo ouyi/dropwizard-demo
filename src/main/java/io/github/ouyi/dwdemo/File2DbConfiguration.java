@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
 public class File2DbConfiguration extends Configuration {
 
     @JsonProperty
-    private String storageRoot = "/tmp/file2db/upload";
+    private String storageRoot = "/tmp/dwdemo/upload";
     @JsonProperty
     private String dateTimePattern = "MM-dd-yyyy HH:mm:ss";
     @JsonProperty

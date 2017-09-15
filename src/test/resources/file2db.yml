@@ -1,5 +1,5 @@
 
-storageRoot: /tmp/file2db/upload
+storageRoot: /tmp/dwdemo/upload
 dateTimePattern: MM-dd-yyyy HH:mm:ss
 timezone: Europe/Berlin
 
@@ -12,7 +12,7 @@ database:
   driverClass: org.h2.Driver
   user: dba
   password: dba
-  url: jdbc:h2:./build/file2db;IGNORECASE=TRUE;MODE=PostgreSQL;DB_CLOSE_DELAY=-1
+  url: jdbc:h2:./build/dwdemo;IGNORECASE=TRUE;MODE=PostgreSQL;DB_CLOSE_DELAY=-1
 
 messageQueue:
   host: localhost
@@ -31,8 +31,8 @@ logging:
       additive: false
       appenders:
         - type: file
-          currentLogFilename: /tmp/log/file2db-reduced.log
-          archivedLogFilenamePattern: /tmp/log/file2db-reduced-%d.log.gz
+          currentLogFilename: /tmp/log/dwdemo-reduced.log
+          archivedLogFilenamePattern: /tmp/log/dwdemo-reduced-%d.log.gz
           archivedFileCount: 5
           timeZone: UTC
   appenders:
@@ -41,9 +41,9 @@ logging:
       timeZone: UTC
       target: stdout
     - type: file
-      currentLogFilename: /tmp/log/file2db.log
+      currentLogFilename: /tmp/log/dwdemo.log
       threshold: ALL
       archive: true
-      archivedLogFilenamePattern: /tmp/log/file2db-%d.log.gz
+      archivedLogFilenamePattern: /tmp/log/dwdemo-%d.log.gz
       archivedFileCount: 5
       timeZone: UTC

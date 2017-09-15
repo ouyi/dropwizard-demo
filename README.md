@@ -2,7 +2,7 @@
 
 ## Overview
 
-The file2db application (entry point: `io.github.ouyi.dwdemo.File2DbApplication`) exposes two endpoints:
+The dwdemo application (entry point: `io.github.ouyi.dwdemo.File2DbApplication`) exposes two endpoints:
 
     PUT     /upload/{target} (io.github.ouyi.dwdemo.api.UploadResource)
     POST    /transform/{filename} (io.github.ouyi.dwdemo.api.TransformResource)
@@ -17,8 +17,8 @@ queue. A worker application (entry point: `io.github.ouyi.dwdemo.mq.File2DbWorke
 each of the messages received, it makes a POST request to the transform service, which then processes the uploaded file, 
 whose lines are converted to records, which are inserted into the database.
 
-For simplicity, the file2db application and the worker application are implemented in the same Java project. However, 
-nothing prevents them from being deployed separately. The file2db application can also be easily deployed as two 
+For simplicity, the dwdemo application and the worker application are implemented in the same Java project. However, 
+nothing prevents them from being deployed separately. The dwdemo application can also be easily deployed as two 
 separate services.
 
 ## Assumptions
@@ -46,7 +46,7 @@ The following tests (including a test with the provided data set data_test.zip) 
 
 ### Build (includes unit tests) and poor man's packaging
 
-    ./gradlew clean build && ./gradlew distZip && unzip build/distributions/file2db.zip -d build/distributions/
+    ./gradlew clean build && ./gradlew distZip && unzip build/distributions/dwdemo.zip -d build/distributions/
 
 ### Integration test
 
@@ -60,23 +60,23 @@ The following tests (including a test with the provided data set data_test.zip) 
 
 ### Manual end-to-end tests
 
-- Start the file2db application (services)
+- Start the dwdemo application (services)
 
         ./gradlew run
     or
 
-        build/distributions/file2db/bin/file2db db status build/resources/test/file2db.yml
-        build/distributions/file2db/bin/file2db db migrate build/resources/test/file2db.yml
-        build/distributions/file2db/bin/file2db server build/resources/test/file2db.yml
+        build/distributions/dwdemo/bin/dwdemo db status build/resources/test/dwdemo.yml
+        build/distributions/dwdemo/bin/dwdemo db migrate build/resources/test/dwdemo.yml
+        build/distributions/dwdemo/bin/dwdemo server build/resources/test/dwdemo.yml
 
 - Start the worker application
 
-        java -cp "./build/distributions/file2db/lib/*" io.github.ouyi.dwdemo.mq.File2DbWorker -c build/resources/test/worker.yml
+        java -cp "./build/distributions/dwdemo/lib/*" io.github.ouyi.dwdemo.mq.File2DbWorker -c build/resources/test/worker.yml
 
 - File upload
 
         curl -X PUT --data-binary @build/resources/test/test.csv localhost:8080/upload/test.csv
-        ls -l /tmp/file2db/upload/
+        ls -l /tmp/dwdemo/upload/
 
 - File transform (optional, triggered by the Worker automatically)
 
@@ -84,9 +84,9 @@ The following tests (including a test with the provided data set data_test.zip) 
 
 - Verify data in the database
 
-        # After stopping the file2db application (ctrl+c in the `./gradlew run` terminal), connect to the database using the database connection
-        # data from build/resources/test/file2db.yml
-        java -cp ./build/distributions/file2db/lib/h2-1.4.193.jar org.h2.tools.Shell
+        # After stopping the dwdemo application (ctrl+c in the `./gradlew run` terminal), connect to the database using the database connection
+        # data from build/resources/test/dwdemo.yml
+        java -cp ./build/distributions/dwdemo/lib/h2-1.4.193.jar org.h2.tools.Shell
         sql> select count(1) from person;
 
 ## TODOs
