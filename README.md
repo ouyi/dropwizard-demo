@@ -2,7 +2,7 @@
 
 ## Overview
 
-The dwdemo application (entry point: `io.github.ouyi.dwdemo.File2DbApplication`) exposes two endpoints:
+The dwdemo application (entry point: `io.github.ouyi.dwdemo.DemoApplication`) exposes two endpoints:
 
     PUT     /upload/{target} (io.github.ouyi.dwdemo.api.UploadResource)
     POST    /transform/{filename} (io.github.ouyi.dwdemo.api.TransformResource)

@@ -30,8 +30,8 @@ public class IntegrationTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(IntegrationTest.class);
 
     @Rule
-    public final DropwizardAppRule<File2DbConfiguration> RULE = new DropwizardAppRule<>(
-            File2DbApplication.class, ResourceHelpers.resourceFilePath("dwdemo.yml"));
+    public final DropwizardAppRule<DemoConfiguration> RULE = new DropwizardAppRule<>(
+            DemoApplication.class, ResourceHelpers.resourceFilePath("dwdemo.yml"));
 
     @Test
     public void testWithMessageQueue() throws IOException, InterruptedException {

@@ -23,12 +23,12 @@ import java.time.format.DateTimeFormatter;
 /**
  * Created by worker on 12/18/16.
  */
-public class File2DbApplication extends Application<File2DbConfiguration>{
+public class DemoApplication extends Application<DemoConfiguration>{
     public static void main(String[] args) throws Exception {
-        new File2DbApplication().run(args);
+        new DemoApplication().run(args);
     }
     @Override
-    public void run(File2DbConfiguration configuration, Environment environment) throws Exception {
+    public void run(DemoConfiguration configuration, Environment environment) throws Exception {
 
         final String storageRoot = configuration.getStorageRoot();
         Files.createDirectories(Paths.get(storageRoot));
@@ -56,10 +56,10 @@ public class File2DbApplication extends Application<File2DbConfiguration>{
     }
 
     @Override
-    public void initialize(Bootstrap<File2DbConfiguration> bootstrap) {
-        bootstrap.addBundle(new MigrationsBundle<File2DbConfiguration>() {
+    public void initialize(Bootstrap<DemoConfiguration> bootstrap) {
+        bootstrap.addBundle(new MigrationsBundle<DemoConfiguration>() {
             @Override
-            public DataSourceFactory getDataSourceFactory(File2DbConfiguration configuration) {
+            public DataSourceFactory getDataSourceFactory(DemoConfiguration configuration) {
                 return configuration.getDataSourceFactory();
             }
         });

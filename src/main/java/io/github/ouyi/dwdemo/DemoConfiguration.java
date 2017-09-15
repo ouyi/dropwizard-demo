@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
  *
  * All fields marked with <code>@JsonProperty</code> are configurable.
  */
-public class File2DbConfiguration extends Configuration {
+public class DemoConfiguration extends Configuration {
 
     @JsonProperty
     private String storageRoot = "/tmp/dwdemo/upload";
