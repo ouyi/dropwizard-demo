@@ -31,7 +31,7 @@ public class IntegrationTest {
 
     @Rule
     public final DropwizardAppRule<File2DbConfiguration> RULE = new DropwizardAppRule<>(
-            File2DbApplication.class, ResourceHelpers.resourceFilePath("file2db.yml"));
+            File2DbApplication.class, ResourceHelpers.resourceFilePath("dwdemo.yml"));
 
     @Test
     public void testWithMessageQueue() throws IOException, InterruptedException {
