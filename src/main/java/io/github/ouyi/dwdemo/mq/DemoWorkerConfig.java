@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 /**
  * Created by worker on 12/26/16.
  */
-public class File2DbWorkerConfig {
+public class DemoWorkerConfig {
     @Valid
     @NotNull
     @JsonProperty

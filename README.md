@@ -1,8 +1,16 @@
 # README
 
+This demo project showcases the following:
+
+- dropwizard for RESTful web services
+- rabbitmq as the message broker for service coordination
+- jdbi for database accesses
+
 ## Overview
 
-The dwdemo application (entry point: `io.github.ouyi.dwdemo.DemoApplication`) exposes two endpoints:
+The dwdemo application allows some csv files to be uploaded, cleansed, transformed, and inserted into databases.
+
+It (entry point: `io.github.ouyi.dwdemo.DemoApplication`) exposes two endpoints:
 
     PUT     /upload/{target} (io.github.ouyi.dwdemo.api.UploadResource)
     POST    /transform/{filename} (io.github.ouyi.dwdemo.api.TransformResource)
@@ -13,7 +21,7 @@ External dependencies of the application:
 - database (configured to use h2 in the following sections)
 
 After successfully processing a file upload request, the upload service publishes a message (filename) to the message 
-queue. A worker application (entry point: `io.github.ouyi.dwdemo.mq.File2DbWorker`) subscribes to the message queue. For 
+queue. A worker application (entry point: `io.github.ouyi.dwdemo.mq.DemoWorker`) subscribes to the message queue. For
 each of the messages received, it makes a POST request to the transform service, which then processes the uploaded file, 
 whose lines are converted to records, which are inserted into the database.
 
@@ -71,7 +79,7 @@ The following tests (including a test with the provided data set data_test.zip) 
 
 - Start the worker application
 
-        java -cp "./build/distributions/dwdemo/lib/*" io.github.ouyi.dwdemo.mq.File2DbWorker -c build/resources/test/worker.yml
+        java -cp "./build/distributions/dwdemo/lib/*" io.github.ouyi.dwdemo.mq.DemoWorker -c build/resources/test/worker.yml
 
 - File upload
 

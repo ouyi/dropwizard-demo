@@ -3,7 +3,7 @@ package io.github.ouyi.dwdemo;
 import io.dropwizard.jdbi.DBIFactory;
 import io.dropwizard.testing.ResourceHelpers;
 import io.dropwizard.testing.junit.DropwizardAppRule;
-import io.github.ouyi.dwdemo.mq.File2DbWorker;
+import io.github.ouyi.dwdemo.mq.DemoWorker;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.junit.Rule;
 import org.junit.Test;
@@ -47,7 +47,7 @@ public class IntegrationTest {
             @Override
             public void run() {
                 try {
-                    File2DbWorker.main(new String[]{"-c ", ResourceHelpers.resourceFilePath("worker.yml")});
+                    DemoWorker.main(new String[]{"-c ", ResourceHelpers.resourceFilePath("worker.yml")});
                 } catch (Exception e) {
                     LOGGER.error(e.getMessage());
                 }

@@ -20,7 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
-public class File2DbWorker {
+public class DemoWorker {
 
     @Parameter(names = {"--help", "-h"}, help = true)
     private boolean help;
@@ -31,9 +31,9 @@ public class File2DbWorker {
     private static final Logger LOGGER = LoggerFactory.getLogger(MessageQueueFactory.class);
 
     public static void main(String[] argv) throws Exception {
-        File2DbWorker worker = new File2DbWorker();
+        DemoWorker worker = new DemoWorker();
         JCommander commandLine = new JCommander(worker, argv);
-        commandLine.setProgramName(File2DbWorker.class.getName());
+        commandLine.setProgramName(DemoWorker.class.getName());
         if (worker.help) {
             commandLine.usage();
             return;
@@ -43,7 +43,7 @@ public class File2DbWorker {
 
     private void run() throws IOException, TimeoutException {
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-        File2DbWorkerConfig config = mapper.readValue(new File(configFile), File2DbWorkerConfig.class);
+        DemoWorkerConfig config = mapper.readValue(new File(configFile), DemoWorkerConfig.class);
 
         WorkQueueSubscriber subscriber = config.getMessageQueueFactory().createSubscriber();
         Channel channel = subscriber.getChannel();
